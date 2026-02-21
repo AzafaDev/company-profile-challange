@@ -1,8 +1,8 @@
 import { createClient } from "next-sanity";
 
 export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  apiVersion: "2024-01-01", // Pakai tanggal hari ini
-  useCdn: false, // Set false kalau mau data paling update (penting buat fitur Create Blog nanti)
-});
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "dummy-id", 
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  apiVersion: "2024-01-01",
+  useCdn: false,
+})
