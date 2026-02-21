@@ -16,7 +16,6 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  // Title Template: Otomatis menambahkan nama brand di setiap halaman
   title: {
     default: "Bean & Beyond — Artisan Coffee Journal",
     template: "%s | Bean & Beyond" 
@@ -26,17 +25,16 @@ export const metadata: Metadata = {
   authors: [{ name: "Hendra Agus" }],
   creator: "Hendra Agus",
   
-  // OpenGraph (Untuk WhatsApp, Facebook, Instagram)
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://beanandbeyond.vercel.app", // ganti dengan domain asli nanti
+    url: "https://beanandbeyond.vercel.app", 
     siteName: "Bean & Beyond",
     title: "Bean & Beyond — Artisan Coffee Journal",
     description: "Menjelajahi narasi kopi dari hulu ke hilir.",
     images: [
       {
-        url: "/Hero.jpg", // pastikan file ini ada di folder public
+        url: "/Hero.jpg",
         width: 1200,
         height: 630,
         alt: "Bean & Beyond Branding",
@@ -44,7 +42,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  // Twitter (Untuk tampilan di X/Twitter)
   twitter: {
     card: "summary_large_image",
     title: "Bean & Beyond",
@@ -52,7 +49,6 @@ export const metadata: Metadata = {
     images: ["/Hero.jpg"],
   },
 
-  // Metadata lainnya
   robots: {
     index: true,
     follow: true,
