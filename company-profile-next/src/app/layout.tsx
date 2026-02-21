@@ -63,11 +63,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" data-theme="light">
-        <link
-    rel="preconnect"
-    href="https://quiet-tortoise-10.clerk.accounts.dev"
-    crossOrigin="anonymous"
-  />
+        
         <body
           className={`${inter.variable} ${playfair.variable} antialiased bg-stone-50 text-stone-900`}
         >
