@@ -64,6 +64,7 @@ export default function MenuPreview() {
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                     fill
+                    fetchPriority="high"
                   />
 
                   {/* Overlay ID Romawi (Melanjutkan urutan Hero & Overview) */}

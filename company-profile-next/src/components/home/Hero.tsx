@@ -7,7 +7,6 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen bg-[#F9F7F2] flex items-center px-6 md:px-24 overflow-hidden pt-20">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        
         {/* KIRI: CONTENT AREA */}
         <div className="lg:col-span-7 z-10">
           <motion.div
@@ -25,8 +24,10 @@ export default function Hero() {
             {/* Judul Utama dengan Aksen Angka Romawi */}
             <div className="relative">
               <h1 className="text-[12vw] lg:text-[9vw] font-serif leading-[0.8] text-stone-900 tracking-tighter">
-                Beyond <br /> 
-                <span className="italic font-light text-stone-400">The Bean.</span>
+                Beyond <br />
+                <span className="italic font-light text-stone-400">
+                  The Bean.
+                </span>
               </h1>
               {/* Angka Romawi III yang tipis di samping */}
               <span className="absolute top-1/2 right-0 lg:-right-10 text-4xl lg:text-6xl font-serif text-stone-200 italic -translate-y-full">
@@ -38,13 +39,25 @@ export default function Hero() {
             <div className="mt-16 flex flex-col gap-6">
               <Link href="/services" className="group flex items-center gap-5">
                 <div className="h-14 w-14 rounded-full border border-amber-800/30 flex items-center justify-center group-hover:bg-amber-800 transition-all duration-500">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-amber-800 group-hover:text-white transition-colors">
-                    <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    className="text-amber-800 group-hover:text-white transition-colors"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.4em] font-black text-stone-900">Explore</p>
-                  <p className="text-sm font-serif italic text-stone-500 leading-none">Collection</p>
+                  <p className="text-[10px] uppercase tracking-[0.4em] font-black text-stone-900">
+                    Explore
+                  </p>
+                  <p className="text-sm font-serif italic text-stone-500 leading-none">
+                    Collection
+                  </p>
                 </div>
               </Link>
             </div>
@@ -53,7 +66,7 @@ export default function Hero() {
 
         {/* KANAN: IMAGE AREA (Editorial Style) */}
         <div className="lg:col-span-5 relative">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, delay: 0.2 }}
@@ -61,18 +74,23 @@ export default function Hero() {
           >
             {/* Main Image Container */}
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] z-20">
-              <Image 
-                src="/Hero.jpg" 
+              <Image
+                src="/Hero.jpg"
                 alt="Coffee Cup"
                 className="w-full h-full object-cover"
                 fill
+                fetchPriority="high"
                 priority
               />
-              
+
               {/* Origin Tag (Floating inside image) */}
               <div className="absolute bottom-10 left-10 text-white z-30">
-                <p className="text-amber-500 text-[10px] uppercase tracking-widest font-bold mb-1">Origin</p>
-                <p className="text-lg font-serif italic leading-tight">Ethiopia, Sidama Region</p>
+                <p className="text-amber-500 text-[10px] uppercase tracking-widest font-bold mb-1">
+                  Origin
+                </p>
+                <p className="text-lg font-serif italic leading-tight">
+                  Ethiopia, Sidama Region
+                </p>
               </div>
             </div>
 

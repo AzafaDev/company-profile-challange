@@ -52,6 +52,7 @@ export default async function BlogDetail({ params }: Props) {
           className="w-full h-full object-cover grayscale brightness-75"
           fill
           priority
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#F9F7F2] to-transparent" />
 

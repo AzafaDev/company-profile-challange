@@ -39,10 +39,11 @@ export function BlogClientContent({ posts }: { posts: any[] }) {
                     <Image
                       src={post.img}
                       alt={post.title}
-                      fill 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" 
-                      priority={index < 2} 
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={index < 2}
                       className="object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-in-out"
+                      fetchPriority="high"
                     />
                     <div className="absolute top-6 left-6 flex gap-2">
                       <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-widest text-stone-900">

@@ -80,6 +80,7 @@ export default function TeamsPage() {
                       className="w-full h-full object-cover"
                       priority
                       fill
+                      fetchPriority="high"
                     />
                   </div>
 
