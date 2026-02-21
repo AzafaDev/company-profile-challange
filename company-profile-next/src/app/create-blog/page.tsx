@@ -94,7 +94,8 @@ export default function CreateBlogPage() {
                   className="relative group w-full aspect-[21/9] bg-stone-100 rounded-3xl overflow-hidden border-2 border-dashed border-stone-200 hover:border-stone-900 transition-all cursor-pointer flex items-center justify-center"
                 >
                   {previewUrl ? (
-                    <Image src={previewUrl} alt="Preview" fill className="object-cover" />
+                    <Image src={previewUrl} alt="Preview" fill className="object-cover"
+                    />
                   ) : (
                     <div className="text-center p-8">
                       <p className="text-stone-400 text-xs font-medium uppercase tracking-widest">Click to upload high-res image</p>

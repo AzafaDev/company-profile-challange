@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -60,10 +61,12 @@ export default function Hero() {
           >
             {/* Main Image Container */}
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] z-20">
-              <img 
+              <Image 
                 src="/Hero.jpg" 
                 alt="Coffee Cup"
                 className="w-full h-full object-cover"
+                fill
+                priority
               />
               
               {/* Origin Tag (Floating inside image) */}

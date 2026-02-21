@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 const menuItems = [
   {
@@ -14,14 +15,14 @@ const menuItems = [
     id: "VI",
     title: "Ethiopia Guji",
     desc: "Light roast, floral & berry",
-    img: "menu-2.avif",
+    img: "/menu-2.avif",
     link: "/services/#series-2",
   },
   {
     id: "VII",
     title: "Signature Latte",
     desc: "Double shot with oat milk",
-    img: "menu-3.avif",
+    img: "/menu-3.avif",
     link: "/services/#series-3",
   },
 ];
@@ -57,11 +58,12 @@ export default function MenuPreview() {
               <Link href={item.link}>
                 {/* Image Container: rounded-3xl & shadow halus */}
                 <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-sm bg-stone-200 mb-8">
-                  <img
+                  <Image
                     src={item.img}
                     alt={item.title}
                     loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    fill
                   />
 
                   {/* Overlay ID Romawi (Melanjutkan urutan Hero & Overview) */}

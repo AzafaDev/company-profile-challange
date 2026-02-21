@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
+import Image from "next/image";
 interface Member {
   name: { first: string; last: string };
   picture: { thumbnail: string; large: string };
@@ -74,10 +74,12 @@ export default function TeamsPage() {
                 <div className="flex items-center gap-6 md:gap-10">
                   {/* Image Kecil (Thumbnail) - Tetap Tajam karena ukurannya kecil */}
                   <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-stone-200 grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700 shadow-inner">
-                    <img
+                    <Image
                       src={member.picture.large}
                       alt={member.name.first}
                       className="w-full h-full object-cover"
+                      priority
+                      fill
                     />
                   </div>
 

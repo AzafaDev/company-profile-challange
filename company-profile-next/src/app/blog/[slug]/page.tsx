@@ -1,5 +1,6 @@
 import { client } from "@/sanity/lib/client";
 import { PortableText } from "@portabletext/react"; // Untuk render body content dari Sanity
+import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
@@ -45,10 +46,12 @@ export default async function BlogDetail({ params }: Props) {
     <main className="min-h-screen bg-[#F9F7F2] pb-40">
       {/* HERO SECTION - Full Width Image */}
       <section className="relative h-[70vh] w-full bg-stone-200 overflow-hidden">
-        <img
+        <Image
           src={post.img}
           alt={post.title}
           className="w-full h-full object-cover grayscale brightness-75"
+          fill
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#F9F7F2] to-transparent" />
 

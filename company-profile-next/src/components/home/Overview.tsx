@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function Overview() {
   return (
@@ -18,10 +19,12 @@ export default function Overview() {
             >
               {/* Image Container - Menggunakan rounded-3xl & shadow yang sama dengan Hero */}
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] z-20 bg-stone-100">
-                <img 
+                <Image 
                   src="/overview.avif" 
                   alt="Our Heritage"
                   className="w-full h-full object-cover"
+                  fill
+                  priority
                 />
               </div>
               
