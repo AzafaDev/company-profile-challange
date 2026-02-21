@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+h1,
+h2,
+h3,
+h4,
+.font-serif {
+  font-family: var(--font-playfair), serif;
+}
+
+body {
+  font-family: var(--font-inter), sans-serif;
+  background-color: #F9F7F2;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Biar animasi Framer Motion gak stutter */
+.motion-gpu {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
