@@ -20,6 +20,16 @@ export const Posts: CollectionConfig = {
           revalidatePath(`/blog/${doc.slug}`);
         }
       }
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        // Membersihkan cache halaman daftar blog
+        revalidatePath("/blog");
+        // Membersihkan cache halaman detail blog yang spesifik menggunakan slug dari data
+        if (doc?.slug) {
+          revalidatePath(`/blog/${doc.slug}`);
+        }
+      }
     ]
   },
   admin: {
@@ -97,6 +107,28 @@ export const Posts: CollectionConfig = {
 
 export const Media: CollectionConfig = {
   slug: "media",
+  hooks: {
+    afterChange: [
+      ({ doc }) => {
+        // Membersihkan cache halaman daftar blog
+        revalidatePath("/blog");
+        // Membersihkan cache halaman detail blog yang spesifik menggunakan slug dari data
+        if (doc?.slug) {
+          revalidatePath(`/blog/${doc.slug}`);
+        }
+      }
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        // Membersihkan cache halaman daftar blog
+        revalidatePath("/blog");
+        // Membersihkan cache halaman detail blog yang spesifik menggunakan slug dari data
+        if (doc?.slug) {
+          revalidatePath(`/blog/${doc.slug}`);
+        }
+      }
+    ]
+  },
   upload: {
     // staticDir sudah tidak terlalu terpakai jika menggunakan Vercel Blob, 
     // tapi Payload tetap membutuhkannya sebagai fallback lokal.
