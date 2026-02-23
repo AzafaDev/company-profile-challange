@@ -11,7 +11,8 @@ const products = [
     title: "Signature Coffee",
     category: "Our Pride",
     price: "From Rp 18.000",
-    description: "Paduan harmonis biji kopi pilihan nusantara dengan susu segar. Menu klasik seperti Es Kopi Susu Gula Aren.",
+    description:
+      "Paduan harmonis biji kopi pilihan nusantara dengan susu segar. Menu klasik seperti Es Kopi Susu Gula Aren.",
     image: "/janji-jiwa-services-4.webp",
     testimonial: "Kopi susu paling konsisten rasanya!",
     client: "Andi, Freelancer",
@@ -21,7 +22,8 @@ const products = [
     title: "Jiwa Toast",
     category: "Perfect Match",
     price: "From Rp 25.000",
-    description: "Roti panggang premium dengan berbagai pilihan topping gurih dan manis. Tekstur renyah di luar namun lembut di dalam.",
+    description:
+      "Roti panggang premium dengan berbagai pilihan topping gurih dan manis. Tekstur renyah di luar namun lembut di dalam.",
     image: "/janji-jiwa-services-2.webp",
     testimonial: "Beef Truffle-nya juara! Porsinya pas buat sarapan.",
     client: "Siska, Kantoran",
@@ -31,27 +33,57 @@ const products = [
     title: "Bulk Order / Catering",
     category: "Big Events",
     price: "Custom Pricing",
-    description: "Hadirkan keseruan Janji Jiwa di acaramu. Kami melayani pesanan partai besar untuk meeting hingga wedding.",
+    description:
+      "Hadirkan keseruan Janji Jiwa di acaramu. Kami melayani pesanan partai besar untuk meeting hingga wedding.",
     image: "/janji-jiwa-services-3.webp",
     testimonial: "Sangat profesional. Kopi datang tepat waktu.",
     client: "Budi, Event Organizer",
   },
 ];
 
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "Coffee & Food Delivery",
+  provider: {
+    "@type": "Restaurant",
+    name: "Janji Jiwa",
+  },
+  areaServed: "Indonesia",
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Janji Jiwa Menu",
+    itemListElement: products.map((p) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: p.title,
+        description: p.description,
+      },
+    })),
+  },
+};
+
+
+
 const ServicesPage = () => {
   return (
     <main className="pt-20 bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 min-h-screen">
-      
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
+      />
+
       {/* HEADER SECTION */}
       <section className="py-20 px-8 text-center">
-        <motion.span 
+        <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-[10px] font-black uppercase tracking-[0.5em] mb-4 block text-[var(--jiwa-red)]"
         >
           Menu & Services
         </motion.span>
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-5xl md:text-7xl font-black italic tracking-tighter"
@@ -75,11 +107,12 @@ const ServicesPage = () => {
               The Jiwa <span className="text-[var(--jiwa-red)]">Standard.</span>
             </h3>
             <p className="opacity-50 max-w-lg mx-auto text-sm md:text-base">
-              Komitmen kami untuk memberikan kualitas terbaik di setiap aspek layanan.
+              Komitmen kami untuk memberikan kualitas terbaik di setiap aspek
+              layanan.
             </p>
           </div>
 
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -87,9 +120,21 @@ const ServicesPage = () => {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10"
           >
             {[
-              { title: "Fresh Ingredients", desc: "Biji kopi pilihan setiap harinya.", icon: <CheckCircle2 size={32} /> },
-              { title: "Fast Delivery", desc: "Sistem pengiriman terintegrasi.", icon: <ShoppingCart size={32} /> },
-              { title: "Eco-Friendly", desc: "Langkah nyata mengurangi plastik.", icon: <Star size={32} /> },
+              {
+                title: "Fresh Ingredients",
+                desc: "Biji kopi pilihan setiap harinya.",
+                icon: <CheckCircle2 size={32} />,
+              },
+              {
+                title: "Fast Delivery",
+                desc: "Sistem pengiriman terintegrasi.",
+                icon: <ShoppingCart size={32} />,
+              },
+              {
+                title: "Eco-Friendly",
+                desc: "Langkah nyata mengurangi plastik.",
+                icon: <Star size={32} />,
+              },
             ].map((feature) => (
               <motion.div
                 key={feature.title}

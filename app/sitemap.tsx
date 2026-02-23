@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // 3. Tambahkan halaman statis utama
-  const routes = ['', '/blog', '/about', '/menu'].map((route) => ({
+  const routes = ['', '/blog', '/about', '/services', '/teams'].map((route) => ({
     url: `${process.env.NEXT_PUBLIC_SERVER_URL}${route}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
