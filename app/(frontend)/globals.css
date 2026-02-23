@@ -7,3 +7,14 @@ html {
     color 0.3s ease;
   scroll-behavior: smooth;
 }
+
+:root {
+  --jiwa-red: #B22222;
+  --bg-primary: #ffffff;
+  --text-primary: #1a1a1a;
+}
+
+[data-theme='dark'] {
+  --bg-primary: #0d0d0d;
+  --text-primary: #f5f5f5;
+}

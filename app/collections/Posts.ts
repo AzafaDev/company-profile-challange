@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload'
+import { CollectionConfig } from "payload";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
@@ -9,6 +9,11 @@ export const Posts: CollectionConfig = {
     {
       name: "title",
       type: "text",
+      required: true,
+    },
+    {
+      name: "content",
+      type: "richText",
       required: true,
     },
     {
@@ -52,12 +57,17 @@ export const Posts: CollectionConfig = {
 };
 
 export const Media: CollectionConfig = {
-  slug: 'media',
-  upload: true,
+  slug: "media",
+  upload: {
+    staticDir: "media",
+  },
+  access: {
+    read: () => true,
+  },
   fields: [
     {
-      name: 'alt',
-      type: 'text',
+      name: "alt",
+      type: "text",
     },
   ],
 };

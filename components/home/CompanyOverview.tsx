@@ -29,7 +29,7 @@ const CompanyOverview = () => {
             style={{ color: JIWA_RED }}
           />
           
-          <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] group">
+          <div className="relative aspect-4/5 sm:aspect-square lg:aspect-4/5 rounded-4xl md:rounded-[3rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] group">
             <Image 
               src="/janji-jiwa-overview.webp" 
               alt="Janji Jiwa Culture" 
@@ -37,7 +37,7 @@ const CompanyOverview = () => {
               className="object-cover transition-transform duration-1000 group-hover:scale-110"
             />
             {/* Overlay Gradient halus */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
           </div>
 
           {/* Badge Experience - Floating & Responsive */}
@@ -63,7 +63,7 @@ const CompanyOverview = () => {
           className="lg:col-span-7 flex flex-col"
         >
           <div className="flex items-center gap-4 mb-6">
-            <span className="w-10 h-[2px]" style={{ backgroundColor: JIWA_RED }} />
+            <span className="w-10 h-0.5" style={{ backgroundColor: JIWA_RED }} />
             <span className="font-black tracking-[0.4em] text-[10px] md:text-[11px] uppercase" style={{ color: JIWA_RED }}>
               Our Essence
             </span>
@@ -109,7 +109,7 @@ const CompanyOverview = () => {
           >
             <span className="relative">
               Explore Our Story
-              <span className="absolute -bottom-2 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full" style={{ backgroundColor: JIWA_RED }} />
+              <span className="absolute -bottom-2 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full" style={{ backgroundColor: JIWA_RED }} />
             </span>
             <div className="w-10 h-10 rounded-full border flex items-center justify-center group-hover:bg-red-700 group-hover:text-white transition-all" style={{ borderColor: `${JIWA_RED}40` }}>
               <ArrowRight size={16} />
