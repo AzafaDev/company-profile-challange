@@ -7,15 +7,19 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "randomuser.me",
-        port: "",
         pathname: "/api/portraits/**",
       },
       {
         protocol: "https",
         hostname: "images.unsplash.com",
-        port: "",
         pathname: "/**",
       },
+      // INI YANG PENTING: Izinkan domain Vercel Blob
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
+      // Opsional: Tetap simpan ini jika kamu masih punya fallback ke local API
       {
         protocol: 'https',
         hostname: 'janji-jiwa-coffee-company-profile.vercel.app',
