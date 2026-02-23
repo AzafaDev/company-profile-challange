@@ -1,6 +1,7 @@
+import withPayload from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -12,10 +13,11 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+        port: "",
         pathname: "/**",
       },
     ],
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);
