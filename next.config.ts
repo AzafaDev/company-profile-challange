@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "janji-jiwa-coffee-company-profile.vercel.app",
+      }
     ],
   },
 };
