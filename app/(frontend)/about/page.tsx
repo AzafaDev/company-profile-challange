@@ -6,20 +6,32 @@ import { Quote, ArrowRight } from "lucide-react";
 import { containerVariants, fadeInUp, fadeInScale } from "@/lib/animations";
 import { TeamCard } from "@/components/about/TeamCard";
 import { PillarBento } from "@/components/about/PillarBento";
+import { TeamSkeleton } from "@/components/about/TeamSkeleton";
 
 const AboutPage = () => {
   const [team, setTeam] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://randomuser.me/api/?results=4&seed=jiwa")
-      .then((res) => res.json())
-      .then((data) => setTeam(data.results));
+    const fetchTeam = async () => {
+      try {
+        const res = await fetch("https://randomuser.me/api/?results=4&seed=jiwa");
+        const data = await res.json();
+        setTeam(data.results);
+      } catch (error) {
+        console.error("Failed to fetch team:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTeam();
   }, []);
 
   return (
-    <main className="pt-20 bg-[var(--bg-primary)] transition-colors duration-500">
+    <main className="pt-20 bg-[var(--bg-primary)] transition-colors duration-500 overflow-x-hidden">
       
-      {/* HERO SECTION */}
+      {/* --- HERO SECTION --- */}
       <section className="py-20 md:py-32 px-6 md:px-12 max-w-7xl mx-auto">
         <motion.div 
           variants={containerVariants}
@@ -43,10 +55,16 @@ const AboutPage = () => {
           </motion.div>
 
           <motion.div variants={fadeInScale} className="lg:col-span-5 order-1 lg:order-2 relative">
-            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl rotate-2">
-              <Image src="/janji-jiwa-history.webp" alt="History" fill className="object-cover" />
+            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 border-4 border-white dark:border-zinc-800">
+              <Image 
+                src="/janji-jiwa-history.webp" 
+                alt="Janji Jiwa History" 
+                fill 
+                className="object-cover"
+                priority
+              />
             </div>
-            <div className="absolute -bottom-6 -left-6 p-6 rounded-3xl shadow-xl border border-zinc-200 dark:border-zinc-800 bg-[var(--bg-primary)] hidden md:block">
+            <div className="absolute -bottom-6 -left-6 p-6 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 bg-[var(--bg-primary)] hidden md:block">
               <Quote size={32} className="text-[var(--jiwa-red)] mb-2" />
               <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-primary)]">Real Taste, Real Soul.</p>
             </div>
@@ -54,14 +72,14 @@ const AboutPage = () => {
         </motion.div>
       </section>
 
-      {/* PILLARS SECTION */}
+      {/* --- PILLARS SECTION --- */}
       <section className="py-24 px-6 md:px-12 bg-zinc-50 dark:bg-zinc-900/30 transition-colors duration-500">
         <div className="max-w-7xl mx-auto">
           <PillarBento />
         </div>
       </section>
 
-      {/* TEAM SECTION */}
+      {/* --- TEAM SECTION --- */}
       <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
         <motion.div 
           variants={containerVariants}
@@ -81,16 +99,20 @@ const AboutPage = () => {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, idx) => (
-              <TeamCard key={idx} member={member} idx={idx} />
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8">
+            {isLoading ? (
+              <TeamSkeleton />
+            ) : (
+              team.map((member, idx) => (
+                <TeamCard key={idx} member={member} idx={idx} />
+              ))
+            )}
           </div>
         </motion.div>
       </section>
 
-      {/* CTA SECTION */}
-      <section className="py-24 px-6">
+      {/* --- CTA SECTION --- */}
+      <section className="py-24 px-6 mb-12">
         <motion.div 
           variants={fadeInScale}
           initial="hidden"
@@ -98,13 +120,16 @@ const AboutPage = () => {
           viewport={{ once: true }}
           className="max-w-7xl mx-auto p-12 md:p-24 rounded-[4rem] text-center relative overflow-hidden shadow-2xl bg-[var(--jiwa-red)] group"
         >
+          {/* Background Text Decor */}
           <div className="absolute inset-0 opacity-[0.07] pointer-events-none select-none flex items-center justify-center overflow-hidden">
-            <h2 className="text-[20vw] font-black italic text-white">JANJI JIWA</h2>
+            <h2 className="text-[15vw] font-black italic text-white whitespace-nowrap">JANJI JIWA JANJI JIWA</h2>
           </div>
+          
           <div className="relative z-10">
             <h2 className="text-5xl md:text-7xl font-black text-white mb-12 italic tracking-tighter leading-none">Ready to Brew <br /> Your Story?</h2>
-            <button className="bg-white text-black px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-105 flex items-center gap-4 mx-auto shadow-xl">
-              Join The Family <ArrowRight size={18} />
+            <button className="bg-white text-black px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-110 active:scale-95 flex items-center gap-4 mx-auto shadow-xl group">
+              Join The Family 
+              <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
             </button>
           </div>
         </motion.div>
