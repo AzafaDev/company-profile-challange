@@ -29,5 +29,7 @@ export default async function BlogPage() {
     image: doc.image.url, 
   }));
 
+  console.log(sanitizedPosts);
+
   return <BlogClient allPosts={sanitizedPosts} />;
 }
