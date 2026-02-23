@@ -123,7 +123,6 @@ export interface UserAuthOperations {
 export interface Post {
   id: number;
   title: string;
-  slug?: string | null;
   content: {
     root: {
       type: string;
@@ -140,10 +139,19 @@ export interface Post {
     [k: string]: unknown;
   };
   excerpt: string;
+  image: number | Media;
+  /**
+   * Muncul sebagai judul di Google. Ideal: 50-60 karakter.
+   */
+  metaTitle?: string | null;
+  /**
+   * Ringkasan di hasil pencarian Google. Ideal: 150-160 karakter.
+   */
+  metaDescription?: string | null;
   author: string;
   date: string;
   category: 'Story' | 'Tips' | 'News' | 'Menu';
-  image: number | Media;
+  slug?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -167,6 +175,14 @@ export interface Media {
   focalY?: number | null;
   sizes?: {
     thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -285,13 +301,15 @@ export interface PayloadMigration {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   content?: T;
   excerpt?: T;
+  image?: T;
+  metaTitle?: T;
+  metaDescription?: T;
   author?: T;
   date?: T;
   category?: T;
-  image?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -316,6 +334,16 @@ export interface MediaSelect<T extends boolean = true> {
     | T
     | {
         thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
           | T
           | {
               url?: T;

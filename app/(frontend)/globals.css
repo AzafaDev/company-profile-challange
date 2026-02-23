@@ -18,3 +18,14 @@ html {
   --bg-primary: #0d0d0d;
   --text-primary: #f5f5f5;
 }
+
+@layer components {
+  .prose-jiwa h1 { @apply text-5xl md:text-6xl; }
+  .prose-jiwa h2 { @apply text-4xl md:text-5xl; }
+  .prose-jiwa h3 { @apply text-3xl md:text-4xl; }
+  
+  /* Link di dalam artikel */
+  .prose-jiwa a {
+    @apply text-[var(--jiwa-red)] font-bold border-b-2 border-[var(--jiwa-red)]/20 hover:border-[var(--jiwa-red)] transition-all;
+  }
+}

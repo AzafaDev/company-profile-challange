@@ -2,103 +2,125 @@
 import React from "react";
 import Link from "next/link";
 import { useThemeStore } from "@/store/useThemeStore";
-import { Instagram, Twitter, Facebook, ArrowUpRight } from "lucide-react";
+import { Instagram, Twitter, Facebook, ArrowUpRight, Mail, MapPin } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Footer = () => {
   const { theme } = useThemeStore();
-  const JIWA_RED = "#B22222";
-  const TEXT_COLOR = theme === "dark" ? "#f5f5f5" : "#1a1a1a";
-  const BORDER_COLOR = theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)";
-
+  
   const footerLinks = [
     { name: "About Us", href: "/about" },
     { name: "Services", href: "/services" },
     { name: "Teams", href: "/teams" },
-    { name: "Blog List", href: "/blog" },
+    { name: "Journal", href: "/blog" },
   ];
 
   const socialLinks = [
-    { icon: <Instagram size={18} />, href: "#" },
-    { icon: <Twitter size={18} />, href: "#" },
-    { icon: <Facebook size={18} />, href: "#" },
+    { icon: <Instagram size={20} />, href: "#", label: "Instagram" },
+    { icon: <Twitter size={20} />, href: "#", label: "Twitter" },
+    { icon: <Facebook size={20} />, href: "#", label: "Facebook" },
   ];
 
   return (
-    <footer 
-      className="py-16 px-8 md:px-12 border-t transition-colors duration-500"
-      style={{ 
-        backgroundColor: theme === 'dark' ? '#080808' : '#ffffff',
-        borderColor: BORDER_COLOR
-      }}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <footer className="relative pt-24 pb-12 px-6 md:px-12 border-t border-[var(--text-primary)]/10 bg-[var(--bg-primary)] transition-colors duration-500 overflow-hidden">
+      {/* Dekorasi Background Halus */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--jiwa-red)]/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
           
-          {/* Brand Column */}
-          <div className="md:col-span-2">
-            <Link href="/" className="group flex flex-col mb-6">
-              <h3 className="text-2xl font-black tracking-tighter leading-none italic" style={{ color: TEXT_COLOR }}>
-                JANJI <span className="not-italic" style={{ color: JIWA_RED }}>JIWA</span>
+          {/* --- Brand Column --- */}
+          <div className="md:col-span-5">
+            <Link href="/" className="group flex flex-col mb-8 outline-none">
+              <h3 className="text-3xl font-black tracking-tighter leading-none italic text-[var(--text-primary)]">
+                JANJI <span className="not-italic text-[var(--jiwa-red)]">JIWA</span>
               </h3>
-              <span className="text-[10px] uppercase tracking-[0.5em] font-bold mt-1 opacity-60" style={{ color: TEXT_COLOR }}>
+              <span className="text-[10px] uppercase tracking-[0.5em] font-bold mt-2 text-[var(--jiwa-red)]">
                 Kopi Dari Hati
               </span>
             </Link>
-            <p className="max-w-sm opacity-60 text-sm leading-relaxed" style={{ color: TEXT_COLOR }}>
-              Bringing the authentic taste of Indonesian coffee to the world. Crafted with passion, served with heart since 2018.
+            <p className="max-w-md text-[var(--text-primary)]/60 text-base leading-relaxed mb-8">
+              Membawa cita rasa kopi asli Indonesia ke tingkat dunia. Diseduh dengan semangat, disajikan dengan hati sejak 2018. Nikmati setiap tegukan sebagai cerita.
             </p>
-          </div>
-
-          {/* Navigation Column */}
-          <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-6" style={{ color: JIWA_RED }}>
-              Navigation
-            </h4>
-            <ul className="flex flex-col gap-4">
-              {footerLinks.map((link) => (
-                <li key={link.name}>
-                  <Link 
-                    href={link.href} 
-                    className="text-sm font-medium opacity-70 hover:opacity-100 transition-all flex items-center gap-1 group"
-                    style={{ color: TEXT_COLOR }}
-                  >
-                    {link.name}
-                    <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-all" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect Column */}
-          <div>
-            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] mb-6" style={{ color: JIWA_RED }}>
-              Connect
-            </h4>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               {socialLinks.map((social, idx) => (
                 <a 
                   key={idx} 
                   href={social.href}
-                  className="p-3 border rounded-none transition-all hover:bg-red-800/10"
-                  style={{ borderColor: BORDER_COLOR, color: TEXT_COLOR }}
+                  aria-label={social.label}
+                  className="w-12 h-12 flex items-center justify-center border border-[var(--text-primary)]/10 text-[var(--text-primary)] hover:bg-[var(--jiwa-red)] hover:border-[var(--jiwa-red)] hover:text-white transition-all duration-300 rounded-sm"
                 >
                   {social.icon}
                 </a>
               ))}
             </div>
           </div>
+
+          {/* --- Navigation Column --- */}
+          <div className="md:col-span-3">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] mb-8 text-[var(--jiwa-red)]">
+              Explore
+            </h4>
+            <ul className="flex flex-col gap-5">
+              {footerLinks.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href} 
+                    className="group text-[var(--text-primary)]/70 hover:text-[var(--text-primary)] transition-all flex items-center gap-2 text-sm font-bold uppercase tracking-widest outline-none"
+                  >
+                    <span className="w-0 group-hover:w-4 h-[2px] bg-[var(--jiwa-red)] transition-all duration-300" />
+                    {link.name}
+                    <ArrowUpRight size={14} className="opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 transition-all duration-300 text-[var(--jiwa-red)]" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* --- Contact Column --- */}
+          <div className="md:col-span-4">
+            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] mb-8 text-[var(--jiwa-red)]">
+              Get in Touch
+            </h4>
+            <div className="space-y-6">
+              <div className="flex items-start gap-4 group">
+                <div className="mt-1 text-[var(--jiwa-red)]">
+                  <MapPin size={20} />
+                </div>
+                <p className="text-[var(--text-primary)]/70 text-sm leading-relaxed group-hover:text-[var(--text-primary)] transition-colors">
+                  Jl. Kedoya Raya No. 2, <br />
+                  Jakarta Barat, Indonesia 11520
+                </p>
+              </div>
+              <div className="flex items-center gap-4 group">
+                <div className="text-[var(--jiwa-red)]">
+                  <Mail size={20} />
+                </div>
+                <p className="text-[var(--text-primary)]/70 text-sm font-bold group-hover:text-[var(--text-primary)] transition-colors">
+                  halo@janjijiwa.com
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div 
-          className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-widest opacity-40"
-          style={{ borderColor: BORDER_COLOR, color: TEXT_COLOR }}
-        >
-          <p>© 2026 PT. JIWA GROUP. ALL RIGHTS RESERVED.</p>
-          <div className="flex gap-6">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+        {/* --- Bottom Bar --- */}
+        <div className="pt-10 border-t border-[var(--text-primary)]/10 flex flex-col md:row justify-between items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-8">
+            <p className="text-[10px] font-black tracking-[0.2em] text-[var(--text-primary)]/40 uppercase">
+              © 2026 PT. JIWA GROUP. ALL RIGHTS RESERVED.
+            </p>
+          </div>
+          <div className="flex gap-8">
+            {["Privacy Policy", "Terms of Service", "Cookies"].map((item) => (
+              <a 
+                key={item}
+                href="#" 
+                className="text-[10px] font-black tracking-[0.2em] text-[var(--text-primary)]/30 hover:text-[var(--jiwa-red)] transition-colors uppercase"
+              >
+                {item}
+              </a>
+            ))}
           </div>
         </div>
       </div>

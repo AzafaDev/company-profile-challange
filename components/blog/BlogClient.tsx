@@ -1,187 +1,84 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { useThemeStore } from "@/store/useThemeStore";
-import {
-  Calendar,
-  User,
-  ArrowRight,
-  Search,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { BlogCard } from "@/components/blog/BlogCard";
+import { BlogSidebar } from "@/components/blog/BlogSidebar";
 
-interface Post {
-  id: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  category: string;
-  image: string;
-}
-
-const BlogClient = ({ allPosts }: { allPosts: Post[] }) => {
-  const { theme } = useThemeStore();
+const BlogClient = ({ allPosts }: { allPosts: any[] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Stories");
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 4;
 
-  const JIWA_RED = "#B22222";
-  const IS_DARK = theme === "dark";
-  const TEXT_PRIMARY = IS_DARK ? "#F5F5F5" : "#1A1A1A";
-  const BG_MAIN = IS_DARK ? "#0D0D0D" : "#FFFFFF";
-  const CARD_BG = IS_DARK ? "#161616" : "#FBFBFB";
-  const BORDER = IS_DARK ? "#262626" : "#EAEAEA";
-
-  // LOGIC FILTER - Sekarang menggunakan allPosts dari props
-  const filteredPosts = allPosts.filter((post) => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "All Stories" || post.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  // LOGIC PAGINATION
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-
   const categories = ["All Stories", "Story", "Tips", "News", "Menu"];
 
+  const filteredPosts = useMemo(() => {
+    return allPosts.filter((post) => {
+      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === "All Stories" || post.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [allPosts, searchQuery, selectedCategory]);
+
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const currentPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+
   return (
-    <main className="pt-24 min-h-screen transition-colors duration-500" style={{ backgroundColor: BG_MAIN }}>
+    <main className="pt-24 min-h-screen transition-colors duration-300 bg-[var(--bg-primary)]">
       <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="mb-16">
-          <span className="font-black tracking-[0.4em] text-[10px] uppercase block mb-4" style={{ color: JIWA_RED }}>
+        <header className="mb-16">
+          <span className="font-black tracking-[0.4em] text-[10px] uppercase block mb-4 text-[var(--jiwa-red)]">
             Journal & News
           </span>
-          <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter" style={{ color: TEXT_PRIMARY }}>
-            Explore <span style={{ color: JIWA_RED }}>Our Soul.</span>
+          <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter text-[var(--text-primary)]">
+            Explore <span className="text-[var(--jiwa-red)]">Our Soul.</span>
           </h1>
-        </div>
+        </header>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          {/* SIDEBAR */}
-          <aside className="lg:w-1/4">
-            <div className="lg:sticky lg:top-32 space-y-8">
-              <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" style={{ color: TEXT_PRIMARY }} size={18} />
-                <input
-                  type="text"
-                  placeholder="Cari artikel..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="w-full pl-12 pr-6 py-4 rounded-2xl border outline-none text-sm transition-all focus:ring-2 focus:ring-red-800/10"
-                  style={{ backgroundColor: CARD_BG, borderColor: BORDER, color: TEXT_PRIMARY }}
-                />
-              </div>
+          <BlogSidebar 
+            searchQuery={searchQuery}
+            setSearchQuery={(val: string) => { setSearchQuery(val); setCurrentPage(1); }}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={(val: string) => { setSelectedCategory(val); setCurrentPage(1); }}
+            categories={categories}
+          />
 
-              <div className="p-8 rounded-[2rem] border" style={{ borderColor: BORDER }}>
-                <h4 className="font-black uppercase text-[10px] tracking-widest mb-6" style={{ color: JIWA_RED }}>
-                  Categories
-                </h4>
-                <ul className="space-y-4 text-sm font-bold" style={{ color: TEXT_PRIMARY }}>
-                  {categories.map((cat) => (
-                    <li
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat);
-                        setCurrentPage(1);
-                      }}
-                      className="cursor-pointer transition-all flex items-center justify-between group"
-                      style={{ opacity: selectedCategory === cat ? 1 : 0.4 }}
-                    >
-                      <span className={`transition-transform duration-300 ${selectedCategory === cat ? "translate-x-2 text-red-700" : "group-hover:translate-x-2"}`}>
-                        {cat}
-                      </span>
-                      {selectedCategory === cat && <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: JIWA_RED }} />}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </aside>
-
-          {/* LIST ARTIKEL */}
           <div className="lg:w-3/4">
             {currentPosts.length > 0 ? (
               <div className="grid grid-cols-1 gap-8 mb-16">
                 {currentPosts.map((post) => (
-                  <article
-                    key={post.id}
-                    className="group flex flex-col md:flex-row rounded-[2.5rem] border overflow-hidden transition-all duration-500 hover:border-red-900/30 hover:shadow-2xl hover:shadow-black/5"
-                    style={{ backgroundColor: CARD_BG, borderColor: BORDER }}
-                  >
-                    <div className="relative h-64 md:h-auto md:w-72 lg:w-80 shrink-0 overflow-hidden">
-                      <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                      <div className="absolute top-6 left-6">
-                        <span className="px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg" style={{ backgroundColor: JIWA_RED }}>
-                          {post.category}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="p-8 md:p-10 flex flex-col flex-1 justify-between">
-                      <div>
-                        <div className="flex items-center gap-3 mb-4 opacity-40 text-[10px] font-bold uppercase tracking-widest" style={{ color: TEXT_PRIMARY }}>
-                          <User size={12} /> {post.author}
-                          <span className="w-1 h-1 rounded-full bg-current"></span>
-                          <Calendar size={12} /> {post.date}
-                        </div>
-                        <h2 className="text-2xl md:text-3xl font-black leading-tight mb-4 tracking-tight line-clamp-2" style={{ color: TEXT_PRIMARY }}>
-                          {post.title}
-                        </h2>
-                        <p className="text-sm opacity-50 leading-relaxed line-clamp-2 mb-6" style={{ color: TEXT_PRIMARY }}>
-                          {post.excerpt}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between mt-auto pt-6 border-t" style={{ borderColor: BORDER }}>
-                        <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all hover:gap-4" style={{ color: JIWA_RED }}>
-                          Continue Reading <ArrowRight size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  </article>
+                  <BlogCard key={post.id} post={post} />
                 ))}
               </div>
             ) : (
-              <div className="py-32 text-center border-2 border-dashed rounded-[3rem]" style={{ borderColor: BORDER }}>
-                <p className="text-lg font-bold opacity-30" style={{ color: TEXT_PRIMARY }}>Tidak ada artikel ditemukan.</p>
+              <div className="py-32 text-center border-2 border-dashed rounded-[3rem] border-[var(--text-primary)]/20 bg-[var(--text-primary)]/[0.02]">
+                <p className="text-lg font-bold opacity-30 text-[var(--text-primary)]">
+                  Tidak ada artikel ditemukan.
+                </p>
               </div>
             )}
 
             {/* PAGINATION */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 border-t pt-10" style={{ borderColor: BORDER }}>
+              <div className="flex items-center justify-center gap-4 border-t border-[var(--text-primary)]/20 pt-10">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-4 rounded-full border transition-all disabled:opacity-10"
-                  style={{ borderColor: BORDER, color: TEXT_PRIMARY }}
+                  className="p-4 rounded-full border-2 border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] disabled:opacity-10 text-[var(--text-primary)]"
                 >
                   <ChevronLeft size={20} />
                 </button>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   {Array.from({ length: totalPages }).map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
-                      className="w-12 h-12 rounded-full font-black text-xs transition-all"
-                      style={{
-                        backgroundColor: currentPage === i + 1 ? JIWA_RED : "transparent",
-                        color: currentPage === i + 1 ? "#fff" : TEXT_PRIMARY,
-                        border: `1px solid ${currentPage === i + 1 ? JIWA_RED : BORDER}`,
-                      }}
+                      className={`w-12 h-12 rounded-full font-black text-xs transition-all border-2 ${
+                        currentPage === i + 1 
+                          ? "bg-[var(--jiwa-red)] text-white border-[var(--jiwa-red)]" 
+                          : "bg-transparent text-[var(--text-primary)] border-[var(--text-primary)]/10 hover:border-[var(--text-primary)]/40"
+                      }`}
                     >
                       {i + 1}
                     </button>
@@ -190,8 +87,7 @@ const BlogClient = ({ allPosts }: { allPosts: Post[] }) => {
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-4 rounded-full border transition-all disabled:opacity-10"
-                  style={{ borderColor: BORDER, color: TEXT_PRIMARY }}
+                  className="p-4 rounded-full border-2 border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] disabled:opacity-10 text-[var(--text-primary)]"
                 >
                   <ChevronRight size={20} />
                 </button>
