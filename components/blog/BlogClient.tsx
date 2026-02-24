@@ -147,6 +147,7 @@ const PaginationButton = ({
     onClick={onClick}
     disabled={disabled}
     className="p-4 rounded-full border border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] hover:text-[var(--jiwa-red)] disabled:opacity-20 text-[var(--text-primary)]"
+    aria-label="pagination-button"
   >
     {children}
   </button>
@@ -168,6 +169,7 @@ const PageNumber = ({
         ? "bg-[var(--jiwa-red)] text-white border-[var(--jiwa-red)] shadow-lg shadow-red-900/20"
         : "bg-transparent text-[var(--text-primary)] border-[var(--text-primary)]/10 hover:border-[var(--text-primary)]/40"
     }`}
+    aria-label="pagination-button"
   >
     {number}
   </button>

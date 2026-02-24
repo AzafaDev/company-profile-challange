@@ -98,7 +98,9 @@ export const MemberCard = ({ member, idx }: MemberCardProps) => {
           </motion.a>
         </div>
 
-        <button className="group/btn flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--jiwa-red)] transition-all">
+        <button className="group/btn flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--jiwa-red)] transition-all"
+        aria-label="view-button"
+        >
           View Profile
           <div className="w-8 h-8 rounded-full flex items-center justify-center border border-[var(--jiwa-red)]/20 group-hover/btn:bg-[var(--jiwa-red)] group-hover/btn:text-white transition-all duration-300">
             <ExternalLink size={12} />

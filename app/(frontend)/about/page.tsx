@@ -8,6 +8,7 @@ import { containerVariants, fadeInUp, fadeInScale } from "@/lib/animations";
 import { TeamCard } from "@/components/about/TeamCard";
 import { PillarBento } from "@/components/about/PillarBento";
 import { TeamSkeleton } from "@/components/about/TeamSkeleton";
+import { useUserStore } from "@/store/useUserStore";
 
 // --- SEO STRUCTURED DATA ---
 const aboutJsonLd = {
@@ -24,25 +25,11 @@ const aboutJsonLd = {
 };
 
 const AboutPage = () => {
-  const [team, setTeam] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { fetchAboutUsers, isLoading, aboutUsers } = useUserStore();
 
   // --- DATA FETCHING ---
   useEffect(() => {
-    const fetchTeam = async () => {
-      try {
-        const res = await fetch(
-          "https://randomuser.me/api/?results=4&seed=jiwa",
-        );
-        const data = await res.json();
-        setTeam(data.results);
-      } catch (error) {
-        console.error("Fetch error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchTeam();
+    fetchAboutUsers();
   }, []);
 
   return (
@@ -151,8 +138,8 @@ const AboutPage = () => {
             {isLoading ? (
               <TeamSkeleton />
             ) : (
-              team.map((member, idx) => (
-                <TeamCard key={idx} member={member} idx={idx} />
+              aboutUsers.map((member, idx) => (
+                <TeamCard key={member.login.uuid} member={member} idx={idx} />
               ))
             )}
           </div>
@@ -177,7 +164,9 @@ const AboutPage = () => {
             <h2 className="text-5xl md:text-7xl font-black text-white mb-12 italic tracking-tighter leading-none">
               Ready to Brew <br /> Your Story?
             </h2>
-            <button className="bg-white text-black px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-110 active:scale-95 flex items-center gap-4 mx-auto shadow-xl group">
+            <button className="bg-white text-black px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-110 active:scale-95 flex items-center gap-4 mx-auto shadow-xl group"
+            aria-label="join-button"
+            >
               Join The Family
               <ArrowRight
                 size={18}

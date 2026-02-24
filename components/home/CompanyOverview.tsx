@@ -12,20 +12,8 @@ import { FeatureCard } from "./overview/FeatureCard";
 
 // Animations
 import { containerVariants, fadeInUp, fadeInScale } from "@/lib/animations";
+import { FEATURES } from "@/const/home";
 
-// --- DATA CONFIGURATION ---
-const FEATURES = [
-  {
-    icon: Users,
-    title: "The People",
-    desc: "Didukung oleh 500+ talenta lokal yang berdedikasi.",
-  },
-  {
-    icon: Zap,
-    title: "The Speed",
-    desc: "Konsistensi rasa dalam pelayanan yang efisien.",
-  },
-];
 
 const CompanyOverview = () => {
   return (

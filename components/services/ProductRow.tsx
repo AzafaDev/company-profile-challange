@@ -99,7 +99,9 @@ export const ProductRow = ({ item, idx }: ProductRowProps) => {
           </div>
 
           {/* ACTION BUTTON */}
-          <button className="group relative flex items-center gap-4 px-10 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-white bg-[var(--jiwa-red)] transition-all duration-500 rounded-full hover:shadow-2xl hover:shadow-red-900/40 active:scale-95">
+          <button className="group relative flex items-center gap-4 px-10 py-5 text-[11px] font-black uppercase tracking-[0.3em] text-white bg-[var(--jiwa-red)] transition-all duration-500 rounded-full hover:shadow-2xl hover:shadow-red-900/40 active:scale-95"
+          aria-label="action-button"
+          >
             Order Now
             <ShoppingCart
               size={18}

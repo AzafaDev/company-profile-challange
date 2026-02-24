@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
+import { ROLES } from "@/const/about";
 
 interface TeamCardProps {
   member: {
@@ -13,7 +14,6 @@ interface TeamCardProps {
   idx: number;
 }
 
-const ROLES = ["Founder", "Head Barista", "Operations", "Quality Control"];
 
 export const TeamCard = ({ member, idx }: TeamCardProps) => {
   // --- LOGIC ---

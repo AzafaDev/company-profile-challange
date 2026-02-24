@@ -113,6 +113,7 @@ const Navbar = () => {
             <button
               onClick={toggleMenu}
               className="p-3 text-[var(--text-primary)] active:scale-90"
+              aria-label="toggle-button"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>

@@ -55,6 +55,7 @@ export default async function BlogPage() {
 // --- 4. DATA FETCHING & SANITIZATION ---
 async function BlogDataFetch() {
   const payload = await getPayloadClient();
+  console.log(payload);
   
   // Fetch data dari Payload dengan depth 1 agar image (relation) berubah jadi object
   const data = await payload.find({
@@ -62,6 +63,8 @@ async function BlogDataFetch() {
     depth: 1,
     sort: "-date", // Urutkan dari yang terbaru
   });
+
+  console.log(data);
 
   // Sanitasi data agar siap digunakan oleh Client Component tanpa error serialisasi
   const sanitizedPosts = data.docs.map((doc: any) => {
@@ -88,6 +91,8 @@ async function BlogDataFetch() {
       image: imageUrl,
     };
   });
+
+  console.log(sanitizedPosts);
 
   // JSON-LD untuk SEO Google (Blog Schema)
   const jsonLd = {

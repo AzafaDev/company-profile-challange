@@ -5,20 +5,14 @@ import { motion } from "framer-motion";
 import { Coffee } from "lucide-react";
 import { containerVariants, fadeInUp } from "@/lib/animations";
 import { MemberCard } from "@/components/teams/MemberCard";
+import { useUserStore } from "@/store/useUserStore";
 
 const TeamsPage = () => {
-  const [team, setTeam] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {isLoading, teamUsers, fetchTeamUsers} = useUserStore()
 
   // --- DATA FETCHING ---
   useEffect(() => {
-    fetch("https://randomuser.me/api/?results=6&seed=jiwa-pro")
-      .then((res) => res.json())
-      .then((data) => {
-        setTeam(data.results);
-        setLoading(false);
-      })
-      .catch((err) => console.error("Fetch error:", err));
+    fetchTeamUsers()
   }, []);
 
   // --- SEO STRUCTURED DATA ---
@@ -26,8 +20,8 @@ const TeamsPage = () => {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Janji Jiwa Team Members",
-    numberOfItems: team.length,
-    itemListElement: team.map((member: any, idx) => ({
+    numberOfItems: teamUsers.length,
+    itemListElement: teamUsers.map((member: any, idx) => ({
       "@type": "ListItem",
       position: idx + 1,
       name: `${member.name.first} ${member.name.last}`,
@@ -78,15 +72,15 @@ const TeamsPage = () => {
           animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {loading
+          {isLoading
             ? [...Array(6)].map((_, n) => (
                 <div
                   key={n}
                   className="h-72 rounded-[3rem] animate-pulse bg-[var(--text-primary)]/[0.05]"
                 />
               ))
-            : team.map((member, idx) => (
-                <MemberCard key={idx} member={member} idx={idx} />
+            : teamUsers.map((member, idx) => (
+                <MemberCard key={member.login.uuid} member={member} idx={idx} />
               ))}
         </motion.div>
       </section>
@@ -104,7 +98,9 @@ const TeamsPage = () => {
             Ready to <span className="text-[var(--jiwa-red)]">Brew</span> with
             us?
           </h2>
-          <button className="px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-105 bg-[var(--jiwa-red)] text-white shadow-xl shadow-red-900/20">
+          <button className="px-12 py-5 rounded-full font-black uppercase text-[11px] tracking-[0.2em] transition-all hover:scale-105 bg-[var(--jiwa-red)] text-white shadow-xl shadow-red-900/20"
+          aria-label="join-button"
+          >
             Join The Community
           </button>
         </motion.div>
