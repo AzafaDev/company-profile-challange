@@ -37,6 +37,7 @@ const CompanyOverview = () => {
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>

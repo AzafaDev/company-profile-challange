@@ -36,6 +36,7 @@ export const BlogCard = ({ post }: BlogPostProps) => {
           fill
           sizes="(max-width: 768px) 100vw, 320px"
           className="object-cover transition-transform duration-1000 group-hover:scale-105"
+          fetchPriority="high"
         />
         {/* Category Badge */}
         <div className="absolute top-6 left-6 z-10">

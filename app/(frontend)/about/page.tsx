@@ -86,6 +86,7 @@ const AboutPage = () => {
                 fill
                 className="object-cover"
                 priority
+                fetchPriority="high"
               />
             </div>
             <div className="absolute -bottom-6 -left-6 p-6 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 bg-(--bg-primary) hidden md:block">

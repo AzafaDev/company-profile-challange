@@ -43,6 +43,7 @@ export const ProductCard = ({ item, index }: ProductCardProps) => (
             fill
             sizes="(max-width: 768px) 160px, 192px"
             className="object-cover transition-transform duration-1000 group-hover:scale-110"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>

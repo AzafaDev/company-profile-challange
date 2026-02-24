@@ -25,6 +25,7 @@ export const HeroImage = () => {
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover transition-transform duration-1000 group-hover:scale-105"
+            fetchPriority="high"
           />
           {/* Subtle Overlay for better contrast with floating cards */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60" />

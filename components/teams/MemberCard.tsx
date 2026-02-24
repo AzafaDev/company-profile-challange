@@ -59,6 +59,7 @@ export const MemberCard = ({ member, idx }: MemberCardProps) => {
               alt={`${member.name.first} ${member.name.last}`}
               fill
               className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-in-out"
+              fetchPriority="high"
             />
           </div>
         </div>

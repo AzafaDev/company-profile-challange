@@ -167,6 +167,7 @@ export default async function PostDetailPage({ params }: PageProps) {
             fill
             className="object-cover"
             priority
+            fetchPriority="high"
           />
         </div>
 

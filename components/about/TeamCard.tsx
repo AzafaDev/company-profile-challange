@@ -38,6 +38,7 @@ export const TeamCard = ({ member, idx }: TeamCardProps) => {
             fill
             sizes="112px"
             className="object-cover scale-110 group-hover:scale-100 transition-transform duration-500"
+            fetchPriority="high"
           />
         </div>
       </div>
