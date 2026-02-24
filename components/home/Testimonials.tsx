@@ -1,44 +1,60 @@
 "use client";
+
 import React from "react";
 import { MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
-import { containerVariants, fadeInUp } from "@/lib/animations";
+
+// Components
 import { TestimonialCard } from "./testimonials/TestimonialCard";
 
-const reviews = [
+// Animations
+import { containerVariants, fadeInUp } from "@/lib/animations";
+
+// --- CONFIGURATION ---
+const TESTIMONIAL_DATA = [
   {
     name: "Adit Pratama",
     role: "Coffee Enthusiast",
-    comment: "Kopi Susu Gula Aren-nya juara! Konsistensi rasanya nggak pernah berubah sejak pertama kali coba di 2018.",
+    comment:
+      "Kopi Susu Gula Aren-nya juara! Konsistensi rasanya nggak pernah berubah sejak pertama kali coba di 2018.",
     rating: 5,
-    avatar: "AP"
+    avatar: "AP",
   },
   {
     name: "Siska Amelia",
     role: "Freelance Designer",
-    comment: "Jiwa Toast dan Latte mereka adalah kombinasi maut buat nemenin kerja seharian. Tempatnya juga industrial banget!",
+    comment:
+      "Jiwa Toast dan Latte mereka adalah kombinasi maut buat nemenin kerja seharian. Tempatnya juga industrial banget!",
     rating: 5,
-    avatar: "SA"
+    avatar: "SA",
   },
   {
     name: "Budi Santoso",
     role: "Daily Commuter",
-    comment: "Pelayanan cepat dan rasa yang selalu bikin melek pagi-pagi. Janji Jiwa emang andalan!",
+    comment:
+      "Pelayanan cepat dan rasa yang selalu bikin melek pagi-pagi. Janji Jiwa emang andalan!",
     rating: 5,
-    avatar: "BS"
-  }
+    avatar: "BS",
+  },
+];
+
+const STATS = [
+  { label: "Average Rating", value: "4.9/5", color: "text-[var(--jiwa-red)]" },
+  { label: "Reviews", value: "10k+", color: "text-[var(--text-primary)]" },
 ];
 
 const Testimonials = () => {
   return (
-    <section className="py-24 px-6 md:px-12 relative overflow-hidden bg-[var(--bg-primary)] transition-colors duration-500">
-      
-      {/* Background Decoration */}
-      <div className="absolute top-0 right-0 p-10 opacity-[0.05] dark:opacity-[0.02] select-none pointer-events-none hidden lg:block text-[var(--text-primary)]">
-        <MessageSquare size={400} />
+    <section className="relative py-24 px-6 md:px-12 overflow-hidden bg-[var(--bg-primary)] transition-colors duration-500">
+      {/* --- DECORATIVE BACKGROUND --- */}
+      <div
+        className="absolute top-0 right-0 p-10 opacity-[0.05] dark:opacity-[0.02] select-none pointer-events-none hidden lg:block text-[var(--text-primary)]"
+        aria-hidden="true"
+      >
+        <MessageSquare size={400} strokeWidth={1} />
       </div>
 
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -46,44 +62,62 @@ const Testimonials = () => {
         className="max-w-7xl mx-auto relative z-10"
       >
         <div className="grid lg:grid-cols-12 gap-16 items-start">
-          
-          {/* LEFT: Header Content */}
-          <div className="lg:col-span-4 lg:sticky lg:top-32">
-            <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-6 justify-center lg:justify-start">
+          {/* --- LEFT COLUMN: HEADER & STATS --- */}
+          <header className="lg:col-span-4 lg:sticky lg:top-32">
+            <motion.div
+              variants={fadeInUp}
+              className="flex items-center gap-3 mb-6 justify-center lg:justify-start"
+            >
               <span className="w-10 h-[2px] bg-[var(--jiwa-red)]" />
               <span className="font-black tracking-[0.4em] text-[10px] uppercase text-[var(--jiwa-red)]">
                 Teman Sejiwa
               </span>
             </motion.div>
 
-            <motion.h2 variants={fadeInUp} className="text-5xl md:text-6xl font-black italic tracking-tighter leading-[0.9] mb-8 text-center lg:text-left text-[var(--text-primary)]">
-              Voices Of <br /> Our <span className="text-[var(--jiwa-red)]">Soul.</span>
+            <motion.h2
+              variants={fadeInUp}
+              className="text-5xl md:text-6xl font-black italic tracking-tighter leading-[0.9] mb-8 text-center lg:text-left text-[var(--text-primary)]"
+            >
+              Voices Of <br /> Our{" "}
+              <span className="text-[var(--jiwa-red)]">Soul.</span>
             </motion.h2>
 
-            <motion.p variants={fadeInUp} className="opacity-60 text-base md:text-lg mb-8 text-center lg:text-left max-w-sm mx-auto lg:mx-0 text-[var(--text-primary)]">
-              Cerita jujur dari mereka yang telah menjadikan Janji Jiwa bagian dari perjalanan harian mereka.
+            <motion.p
+              variants={fadeInUp}
+              className="opacity-60 text-base md:text-lg mb-10 text-center lg:text-left max-w-sm mx-auto lg:mx-0 text-[var(--text-primary)] font-medium leading-relaxed"
+            >
+              Cerita jujur dari mereka yang telah menjadikan Janji Jiwa bagian
+              dari perjalanan harian mereka.
             </motion.p>
-            
-            {/* Social Proof Stats */}
-            <motion.div variants={fadeInUp} className="flex items-center justify-center lg:justify-start gap-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
-              <div>
-                <p className="text-2xl font-black text-[var(--jiwa-red)]">4.9/5</p>
-                <p className="text-[10px] font-bold uppercase opacity-50 text-[var(--text-primary)]">Average Rating</p>
-              </div>
-              <div>
-                <p className="text-2xl font-black text-[var(--text-primary)]">10k+</p>
-                <p className="text-[10px] font-bold uppercase opacity-50 text-[var(--text-primary)]">Reviews</p>
-              </div>
-            </motion.div>
-          </div>
 
-          {/* RIGHT: Testimonial Cards */}
+            {/* Social Proof Stats */}
+            <motion.div
+              variants={fadeInUp}
+              className="flex items-center justify-center lg:justify-start gap-12 pt-8 border-t border-zinc-200 dark:border-zinc-800/50"
+            >
+              {STATS.map((stat, i) => (
+                <div key={i}>
+                  <p className={`text-3xl font-black ${stat.color} mb-1`}>
+                    {stat.value}
+                  </p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest opacity-40 text-[var(--text-primary)]">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </motion.div>
+          </header>
+
+          {/* --- RIGHT COLUMN: TESTIMONIAL FEED --- */}
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {reviews.map((rev, idx) => (
-              <TestimonialCard key={idx} rev={rev} index={idx} />
+            {TESTIMONIAL_DATA.map((rev, idx) => (
+              <TestimonialCard
+                key={`${rev.name}-${idx}`}
+                rev={rev}
+                index={idx}
+              />
             ))}
           </div>
-
         </div>
       </motion.div>
     </section>

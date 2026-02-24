@@ -2,10 +2,9 @@ import sharp from "sharp";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { Media, Posts } from "./app/collections/Posts";
-
-// Ganti nama import menjadi vercelBlobStorage
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob';
+import { Posts } from "./app/collections/Posts";
+import { Media } from "./app/collections/Media";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 
 export default buildConfig({
   editor: lexicalEditor(),

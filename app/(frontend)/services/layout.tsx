@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 
+// --- PAGE METADATA ---
 export const metadata: Metadata = {
   title: "Services & Menu",
-  description: "Jelajahi menu andalan Janji Jiwa, mulai dari Signature Coffee, Jiwa Toast premium, hingga layanan katering untuk acara spesial Anda.",
+  description:
+    "Jelajahi menu andalan Janji Jiwa, mulai dari Signature Coffee, Jiwa Toast premium, hingga layanan katering untuk acara spesial Anda.",
   openGraph: {
     title: "Menu & Layanan Janji Jiwa | Kopi Dari Hati",
     description: "Nikmati perpaduan kopi nusantara dan roti panggang premium.",

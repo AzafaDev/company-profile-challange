@@ -123,6 +123,9 @@ export interface UserAuthOperations {
 export interface Post {
   id: number;
   title: string;
+  /**
+   * Tulis isi konten selengkap mungkin untuk Teman Sejiwa.
+   */
   content: {
     root: {
       type: string;
@@ -138,19 +141,25 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  /**
+   * Ringkasan pendek untuk halaman depan blog (max 160 karakter).
+   */
   excerpt: string;
   image: number | Media;
   /**
-   * Muncul sebagai judul di Google. Ideal: 50-60 karakter.
+   * Ideal: 50-60 karakter.
    */
   metaTitle?: string | null;
   /**
-   * Ringkasan di hasil pencarian Google. Ideal: 150-160 karakter.
+   * Ideal: 150-160 karakter.
    */
   metaDescription?: string | null;
   author: string;
   date: string;
   category: 'Story' | 'Tips' | 'News' | 'Menu';
+  /**
+   * URL unik. Digenerate otomatis dari judul jika kosong.
+   */
   slug?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -161,6 +170,9 @@ export interface Post {
  */
 export interface Media {
   id: number;
+  /**
+   * Teks deskripsi gambar untuk aksesibilitas dan SEO Google.
+   */
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -175,6 +187,14 @@ export interface Media {
   focalY?: number | null;
   sizes?: {
     thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -334,6 +354,16 @@ export interface MediaSelect<T extends boolean = true> {
     | T
     | {
         thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
           | T
           | {
               url?: T;

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Coffee } from "lucide-react";
@@ -9,20 +10,22 @@ const TeamsPage = () => {
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // --- DATA FETCHING ---
   useEffect(() => {
     fetch("https://randomuser.me/api/?results=6&seed=jiwa-pro")
       .then((res) => res.json())
       .then((data) => {
         setTeam(data.results);
         setLoading(false);
-      });
+      })
+      .catch((err) => console.error("Fetch error:", err));
   }, []);
 
+  // --- SEO STRUCTURED DATA ---
   const teamJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "Janji Jiwa Team Members",
-    description: "Daftar individu di balik operasional Janji Jiwa",
     numberOfItems: team.length,
     itemListElement: team.map((member: any, idx) => ({
       "@type": "ListItem",
@@ -33,12 +36,13 @@ const TeamsPage = () => {
   };
 
   return (
-    <main className="pt-24 min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 pb-20">
+    <main className="pt-30 min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 pb-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(teamJsonLd) }}
       />
-      {/* HEADER SECTION */}
+
+      {/* --- HEADER SECTION --- */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col items-center text-center">
           <motion.div
@@ -66,7 +70,7 @@ const TeamsPage = () => {
         </div>
       </section>
 
-      {/* TEAM GRID */}
+      {/* --- TEAM GRID --- */}
       <section className="px-6 md:px-12 max-w-7xl mx-auto">
         <motion.div
           variants={containerVariants}
@@ -87,7 +91,7 @@ const TeamsPage = () => {
         </motion.div>
       </section>
 
-      {/* CTA SECTION */}
+      {/* --- CTA SECTION --- */}
       <section className="mt-32 px-6">
         <motion.div
           variants={fadeInUp}

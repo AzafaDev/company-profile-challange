@@ -1,11 +1,13 @@
 "use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, ShoppingCart, Star } from "lucide-react";
 import { ProductRow } from "@/components/services/ProductRow";
 import { containerVariants, fadeInUp } from "@/lib/animations";
 
-const products = [
+// --- DATA CONFIGURATION ---
+const PRODUCTS = [
   {
     id: 1,
     title: "Signature Coffee",
@@ -41,19 +43,35 @@ const products = [
   },
 ];
 
+const FEATURES = [
+  {
+    title: "Fresh Ingredients",
+    desc: "Biji kopi pilihan setiap harinya.",
+    icon: <CheckCircle2 size={32} />,
+  },
+  {
+    title: "Fast Delivery",
+    desc: "Sistem pengiriman terintegrasi.",
+    icon: <ShoppingCart size={32} />,
+  },
+  {
+    title: "Eco-Friendly",
+    desc: "Langkah nyata mengurangi plastik.",
+    icon: <Star size={32} />,
+  },
+];
+
+// --- SEO STRUCTURED DATA ---
 const servicesJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
   serviceType: "Coffee & Food Delivery",
-  provider: {
-    "@type": "Restaurant",
-    name: "Janji Jiwa",
-  },
+  provider: { "@type": "Restaurant", name: "Janji Jiwa" },
   areaServed: "Indonesia",
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Janji Jiwa Menu",
-    itemListElement: products.map((p) => ({
+    itemListElement: PRODUCTS.map((p) => ({
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
@@ -64,17 +82,15 @@ const servicesJsonLd = {
   },
 };
 
-
-
 const ServicesPage = () => {
   return (
-    <main className="pt-20 bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 min-h-screen">
+    <main className="pt-30 bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-300 min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
       />
 
-      {/* HEADER SECTION */}
+      {/* --- HEADER SECTION --- */}
       <section className="py-20 px-8 text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
@@ -92,17 +108,17 @@ const ServicesPage = () => {
         </motion.h1>
       </section>
 
-      {/* PRODUCTS LIST */}
+      {/* --- PRODUCTS LIST --- */}
       <section className="pb-24">
-        {products.map((item, idx) => (
+        {PRODUCTS.map((item, idx) => (
           <ProductRow key={item.id} item={item} idx={idx} />
         ))}
       </section>
 
-      {/* QUALITY STANDARD SECTION */}
+      {/* --- QUALITY STANDARD SECTION --- */}
       <section className="py-24 px-6 md:px-12 border-t border-[var(--text-primary)]/10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <header className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter">
               The Jiwa <span className="text-[var(--jiwa-red)]">Standard.</span>
             </h3>
@@ -110,7 +126,7 @@ const ServicesPage = () => {
               Komitmen kami untuk memberikan kualitas terbaik di setiap aspek
               layanan.
             </p>
-          </div>
+          </header>
 
           <motion.div
             variants={containerVariants}
@@ -119,23 +135,7 @@ const ServicesPage = () => {
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10"
           >
-            {[
-              {
-                title: "Fresh Ingredients",
-                desc: "Biji kopi pilihan setiap harinya.",
-                icon: <CheckCircle2 size={32} />,
-              },
-              {
-                title: "Fast Delivery",
-                desc: "Sistem pengiriman terintegrasi.",
-                icon: <ShoppingCart size={32} />,
-              },
-              {
-                title: "Eco-Friendly",
-                desc: "Langkah nyata mengurangi plastik.",
-                icon: <Star size={32} />,
-              },
-            ].map((feature) => (
+            {FEATURES.map((feature) => (
               <motion.div
                 key={feature.title}
                 variants={fadeInUp}

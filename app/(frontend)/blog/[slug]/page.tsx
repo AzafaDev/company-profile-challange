@@ -11,53 +11,59 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/**
- * 1. SEO DYNAMIC METADATA
- * Memastikan judul & deskripsi di Google sesuai dengan yang diinput di CMS
- */
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+// --- 1. STATIC PARAMS (SSG) ---
+// Membuat halaman statis saat build time untuk performa maksimal
+export async function generateStaticParams() {
+  const payload = await getPayloadClient();
+  const posts = await payload.find({
+    collection: "posts",
+    limit: 100,
+    select: { slug: true },
+  });
+
+  return posts.docs.map((post) => ({ slug: post.slug }));
+}
+
+// --- 2. DYNAMIC METADATA ---
+// Mengambil metaTitle dan metaDescription dari Payload CMS
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "posts",
     where: { slug: { equals: slug } },
-    depth: 1,
   });
 
   const post = result.docs[0];
   if (!post) return { title: "Post Not Found" };
 
-  const postImage = post.image as any;
+  // Safety check untuk image object
+  const postImage = typeof post.image === "object" ? (post.image as any) : null;
+  const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
 
   return {
-    title: post.metaTitle || `${post.title} | Janji Jiwa Journal`,
+    title: post.metaTitle || `${post.title} | Janji Jiwa`,
     description: post.metaDescription || post.excerpt,
-    alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SERVER_URL}/blog/${post.slug}`,
-    },
+    alternates: { canonical: `${siteUrl}/blog/${post.slug}` },
     openGraph: {
       title: post.metaTitle || post.title,
       description: post.metaDescription || post.excerpt,
       images: [{ url: postImage?.url || "/og-image.jpg" }],
       type: "article",
-      publishedTime: post.date,
+      publishedTime: post.date as string,
       authors: [post.author],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.metaTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      images: [postImage?.url || "/og-image.jpg"],
     },
   };
 }
 
+// --- 3. MAIN COMPONENT ---
 export default async function PostDetailPage({ params }: PageProps) {
-  // UNWRAP PARAMS (Standar Next.js 15)
   const { slug } = await params;
   const payload = await getPayloadClient();
 
-  // FETCH DATA UTAMA
+  // Fetch Main Post dengan depth: 1 agar relasi 'image' terisi objek Media
   const result = await payload.find({
     collection: "posts",
     where: { slug: { equals: slug } },
@@ -67,109 +73,115 @@ export default async function PostDetailPage({ params }: PageProps) {
   const post = result.docs[0];
   if (!post) return notFound();
 
-  // IMAGE HANDLING
-  const imageData = typeof post.image !== "number" ? post.image : null;
+  // Image Logic - Menangani data dari relasi Media
+  const imageData =
+    post.image && typeof post.image === "object" ? (post.image as any) : null;
   const imageUrl = imageData?.url || "/placeholder.webp";
-  const imageAlt = (typeof imageData !== "string" && imageData?.alt) || post.title;
+  const imageAlt = imageData?.alt || post.title;
 
-  // FETCH RELATED POSTS (Untuk meningkatkan internal linking SEO)
+  // Fetch Related Stories - Berdasarkan kategori yang sama
   const relatedResult = await payload.find({
     collection: "posts",
-    where: { 
+    where: {
       and: [
-        { category: { equals: post.category } }, 
-        { slug: { not_equals: slug } }
-      ] 
+        { category: { equals: post.category } },
+        { slug: { not_equals: slug } },
+      ],
     },
     limit: 2,
-    depth: 1,
   });
 
-  /**
-   * 2. JSON-LD SCHEMA
-   * Script ini tidak terlihat di UI, tapi sangat disukai Google untuk Rich Snippets
-   */
+  // Data terstruktur untuk SEO Google (JSON-LD)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": post.title,
-    "image": imageUrl,
-    "datePublished": post.date,
-    "author": { "@type": "Person", "name": post.author },
-    "description": post.excerpt,
-    "publisher": {
-      "@type": "Organization",
-      "name": "Janji Jiwa",
-      "logo": { "@type": "ImageObject", "url": `${process.env.NEXT_PUBLIC_SERVER_URL}/logo.png` }
-    }
+    headline: post.title,
+    image: imageUrl,
+    datePublished: post.date,
+    author: { "@type": "Person", name: post.author },
+    description: post.excerpt,
   };
 
   return (
     <main className="min-h-screen bg-[var(--bg-primary)] pt-32 pb-20 transition-colors duration-300">
-      {/* SEO SCHEMA */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <div className="max-w-4xl mx-auto px-6">
-        {/* NAVIGASI */}
-        <Link 
-          href="/blog" 
+        {/* --- Back Navigation --- */}
+        <Link
+          href="/blog"
           className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--jiwa-red)] mb-12 hover:gap-4 transition-all group"
         >
-          <ChevronLeft size={16} className="transition-transform group-hover:-translate-x-1" /> 
+          <ChevronLeft
+            size={16}
+            className="transition-transform group-hover:-translate-x-1"
+          />
           Back to Journal
         </Link>
 
-        {/* HEADER */}
+        {/* --- Header Section --- */}
         <header className="mb-12">
           <div className="flex flex-wrap items-center gap-4 mb-8">
-            <span className="px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-white bg-[var(--jiwa-red)] shadow-lg shadow-red-900/20">
+            <span className="px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest text-white bg-[var(--jiwa-red)]">
               {post.category}
             </span>
             <div className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-widest text-[var(--text-primary)]/50">
               <span className="flex items-center gap-1.5">
                 <Calendar size={14} className="text-[var(--jiwa-red)]" />
-                {new Date(post.date).toLocaleDateString("id-ID", { day: 'numeric', month: 'long', year: 'numeric' })}
+                {new Date(post.date as string).toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
               </span>
             </div>
           </div>
+
           <h1 className="text-4xl md:text-7xl font-black italic tracking-tighter leading-[0.95] text-[var(--text-primary)] mb-10">
             {post.title}
           </h1>
+
           <div className="flex items-center gap-4 pt-8 border-t border-[var(--text-primary)]/20">
-            <div className="w-12 h-12 rounded-full bg-[var(--jiwa-red)] flex items-center justify-center text-white border-4 border-[var(--bg-primary)] shadow-xl">
+            <div className="w-12 h-12 rounded-full bg-[var(--jiwa-red)] flex items-center justify-center text-white border-4 border-[var(--bg-primary)] shadow-xl overflow-hidden relative">
               <User size={24} />
             </div>
             <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--jiwa-red)] mb-0.5">Author</p>
-              <p className="text-base font-bold text-[var(--text-primary)]">{post.author}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[var(--jiwa-red)] mb-0.5">
+                Author
+              </p>
+              <p className="text-base font-bold text-[var(--text-primary)]">
+                {post.author}
+              </p>
             </div>
           </div>
         </header>
 
-        {/* HERO IMAGE */}
-        <div className="relative aspect-[16/9] rounded-[3.5rem] overflow-hidden mb-16 border-2 border-[var(--text-primary)]/10 shadow-2xl">
-          <Image 
-            src={imageUrl} 
-            alt={imageAlt} 
-            fill 
-            className="object-cover" 
-            priority 
+        {/* --- Featured Image --- */}
+        <div className="relative aspect-[16/9] rounded-[2rem] md:rounded-[3.5rem] overflow-hidden mb-16 border-2 border-[var(--text-primary)]/10 shadow-2xl">
+          <Image
+            src={imageUrl}
+            alt={imageAlt}
+            fill
+            className="object-cover"
+            priority
           />
         </div>
 
-        {/* BODY ARTICLE */}
+        {/* --- Article Body --- */}
         <article className="max-w-none">
+          {/* Blockquote Style for Excerpt */}
           <div className="text-2xl md:text-3xl font-medium italic text-[var(--text-primary)]/80 border-l-8 border-[var(--jiwa-red)] pl-8 mb-16 leading-relaxed bg-[var(--text-primary)]/[0.03] py-8 pr-8 rounded-r-[2rem]">
             "{post.excerpt}"
           </div>
-          
+
+          {/* Parser untuk konten RichText dari Payload */}
           <RichTextParser content={post.content} />
         </article>
 
-        {/* RELATED STORIES */}
+        {/* --- Related Stories Section --- */}
         {relatedResult.docs.length > 0 && (
           <section className="mt-40 pt-20 border-t-4 border-dashed border-[var(--text-primary)]/10">
             <h3 className="text-3xl md:text-5xl font-black italic tracking-tighter text-[var(--text-primary)] mb-12">
@@ -177,13 +189,21 @@ export default async function PostDetailPage({ params }: PageProps) {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               {relatedResult.docs.map((relatedDoc: any) => (
-                <BlogCard 
-                  key={relatedDoc.id} 
+                <BlogCard
+                  key={relatedDoc.id}
                   post={{
                     ...relatedDoc,
-                    date: new Date(relatedDoc.date).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric' }),
-                    image: typeof relatedDoc.image !== "number" ? relatedDoc.image?.url : "/placeholder.webp"
-                  }} 
+                    // Format tanggal untuk kartu
+                    date: new Date(relatedDoc.date).toLocaleDateString(
+                      "id-ID",
+                      { day: "numeric", month: "short", year: "numeric" },
+                    ),
+                    // Menangani gambar untuk kartu
+                    image:
+                      typeof relatedDoc.image === "object"
+                        ? relatedDoc.image?.url
+                        : "/placeholder.webp",
+                  }}
                 />
               ))}
             </div>

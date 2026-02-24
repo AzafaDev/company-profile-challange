@@ -1,32 +1,43 @@
 "use client";
-import { fadeInUp } from "@/lib/animations";
+
+import React from "react";
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
+import { fadeInUp } from "@/lib/animations";
 
-// Tambahkan delay: number di sini
 interface FeatureCardProps {
   icon: LucideIcon;
   title: string;
   desc: string;
-  delay?: number; // Pakai tanda tanya (?) agar opsional
+  delay?: number;
 }
 
-export const FeatureCard = ({ icon: Icon, title, desc, delay }: FeatureCardProps) => (
-  <motion.div 
+export const FeatureCard = ({
+  icon: Icon,
+  title,
+  desc,
+  delay = 0,
+}: FeatureCardProps) => (
+  <motion.div
     variants={fadeInUp}
-    // Jika kamu ingin pakai stagger otomatis, delay ini tidak wajib dipakai di transisi,
-    // tapi harus ada di definisi agar TS tidak marah.
-    className="p-6 rounded-2xl border border-zinc-200/50 dark:border-transparent hover:border-zinc-300 dark:hover:border-zinc-800 transition-all bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md"
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    transition={{ delay }} // Memungkinkan stagger manual jika tidak menggunakan containerVariants
+    className="group p-6 rounded-3xl border border-[var(--text-primary)]/5 bg-[var(--bg-primary)] hover:border-[var(--jiwa-red)]/20 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-[var(--jiwa-red)]/5"
   >
-    <div className="mb-4 w-10 h-10 rounded-full flex items-center justify-center bg-[var(--jiwa-red)]/10 text-[var(--jiwa-red)]">
-      <Icon size={20} />
+    {/* Icon Container with Hover Animation */}
+    <div className="mb-5 w-12 h-12 rounded-2xl flex items-center justify-center bg-[var(--jiwa-red)]/10 text-[var(--jiwa-red)] transition-transform duration-500 group-hover:rotate-[10deg] group-hover:scale-110">
+      <Icon size={22} strokeWidth={2.5} />
     </div>
 
-    <h4 className="font-bold text-sm uppercase tracking-wider mb-2 text-zinc-900 dark:text-zinc-100">
+    {/* Title */}
+    <h4 className="font-black text-[11px] uppercase tracking-[0.2em] mb-3 text-[var(--text-primary)] italic">
       {title}
     </h4>
 
-    <p className="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400 font-medium">
+    {/* Description */}
+    <p className="text-sm leading-relaxed text-[var(--text-primary)] opacity-60 font-medium group-hover:opacity-80 transition-opacity">
       {desc}
     </p>
   </motion.div>

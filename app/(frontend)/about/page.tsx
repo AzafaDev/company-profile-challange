@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -8,6 +9,7 @@ import { TeamCard } from "@/components/about/TeamCard";
 import { PillarBento } from "@/components/about/PillarBento";
 import { TeamSkeleton } from "@/components/about/TeamSkeleton";
 
+// --- SEO STRUCTURED DATA ---
 const aboutJsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
@@ -17,10 +19,7 @@ const aboutJsonLd = {
     description:
       "Penyedia kopi kualitas dunia untuk masyarakat Indonesia sejak 2018.",
     foundingDate: "2018",
-    brand: {
-      "@type": "Brand",
-      name: "Janji Jiwa",
-    },
+    brand: { "@type": "Brand", name: "Janji Jiwa" },
   },
 };
 
@@ -28,6 +27,7 @@ const AboutPage = () => {
   const [team, setTeam] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // --- DATA FETCHING ---
   useEffect(() => {
     const fetchTeam = async () => {
       try {
@@ -37,17 +37,16 @@ const AboutPage = () => {
         const data = await res.json();
         setTeam(data.results);
       } catch (error) {
-        console.error("Failed to fetch team:", error);
+        console.error("Fetch error:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchTeam();
   }, []);
 
   return (
-    <main className="pt-20 bg-[var(--bg-primary)] transition-colors duration-500 overflow-x-hidden">
+    <main className="pt-30 bg-(--bg-primary) transition-colors duration-500 overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
@@ -62,21 +61,21 @@ const AboutPage = () => {
           viewport={{ once: true }}
           className="grid lg:grid-cols-12 gap-12 items-center"
         >
+          {/* Text Content */}
           <motion.div
             variants={fadeInUp}
             className="lg:col-span-7 order-2 lg:order-1"
           >
             <div className="flex items-center gap-4 mb-6">
-              <span className="w-12 h-[2px] bg-[var(--jiwa-red)]" />
-              <span className="font-black tracking-[0.4em] text-[10px] uppercase text-[var(--jiwa-red)]">
+              <span className="w-12 h-0.5 bg-(--jiwa-red)" />
+              <span className="font-black tracking-[0.4em] text-[10px] uppercase text-(--jiwa-red)">
                 Since 2018
               </span>
             </div>
-            <h1 className="text-6xl md:text-8xl font-black mb-10 italic leading-[0.85] tracking-tighter text-[var(--text-primary)]">
-              Kopi Dari <br />{" "}
-              <span className="text-[var(--jiwa-red)]">Hati.</span>
+            <h1 className="text-6xl md:text-8xl font-black mb-10 italic leading-[0.85] tracking-tighter text-(--text-primary)">
+              Kopi Dari <br /> <span className="text-(--jiwa-red)">Hati.</span>
             </h1>
-            <div className="grid md:grid-cols-2 gap-8 text-base leading-relaxed opacity-70 text-[var(--text-primary)]">
+            <div className="grid md:grid-cols-2 gap-8 text-base leading-relaxed opacity-70 text-(--text-primary)">
               <p>
                 Janji Jiwa lahir dari misi menyajikan kopi kualitas dunia untuk
                 setiap lapisan masyarakat Indonesia.
@@ -88,22 +87,23 @@ const AboutPage = () => {
             </div>
           </motion.div>
 
+          {/* Image Content */}
           <motion.div
             variants={fadeInScale}
             className="lg:col-span-5 order-1 lg:order-2 relative"
           >
-            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 border-4 border-white dark:border-zinc-800">
+            <div className="relative aspect-4/5 rounded-[3rem] overflow-hidden shadow-2xl rotate-2 border-4 border-white dark:border-zinc-800">
               <Image
                 src="/janji-jiwa-history.webp"
-                alt="Janji Jiwa History"
+                alt="History"
                 fill
                 className="object-cover"
                 priority
               />
             </div>
-            <div className="absolute -bottom-6 -left-6 p-6 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 bg-[var(--bg-primary)] hidden md:block">
-              <Quote size={32} className="text-[var(--jiwa-red)] mb-2" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-primary)]">
+            <div className="absolute -bottom-6 -left-6 p-6 rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 bg-(--bg-primary) hidden md:block">
+              <Quote size={32} className="text-(--jiwa-red) mb-2" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-(--text-primary)">
                 Real Taste, Real Soul.
               </p>
             </div>
@@ -131,16 +131,16 @@ const AboutPage = () => {
               variants={fadeInUp}
               className="max-w-2xl text-center lg:text-left mx-auto lg:mx-0"
             >
-              <span className="font-black tracking-[0.4em] text-[10px] uppercase block mb-4 text-[var(--jiwa-red)]">
+              <span className="font-black tracking-[0.4em] text-[10px] uppercase block mb-4 text-(--jiwa-red)">
                 The Creators
               </span>
-              <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-[var(--text-primary)]">
-                Meet The <span className="text-[var(--jiwa-red)]">Faces.</span>
+              <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-(--text-primary)">
+                Meet The <span className="text-(--jiwa-red)">Faces.</span>
               </h2>
             </motion.div>
             <motion.p
               variants={fadeInUp}
-              className="text-sm max-w-xs mx-auto lg:mx-0 text-center lg:text-left opacity-60 text-[var(--text-primary)]"
+              className="text-sm max-w-xs mx-auto lg:mx-0 text-center lg:text-left opacity-60 text-(--text-primary)"
             >
               Orang-orang dibalik layar yang memastikan janji kami sampai ke
               tangan Anda.
@@ -166,15 +166,13 @@ const AboutPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="max-w-7xl mx-auto p-12 md:p-24 rounded-[4rem] text-center relative overflow-hidden shadow-2xl bg-[var(--jiwa-red)] group"
+          className="max-w-7xl mx-auto p-12 md:p-24 rounded-[4rem] text-center relative overflow-hidden shadow-2xl bg-(--jiwa-red) group"
         >
-          {/* Background Text Decor */}
           <div className="absolute inset-0 opacity-[0.07] pointer-events-none select-none flex items-center justify-center overflow-hidden">
             <h2 className="text-[15vw] font-black italic text-white whitespace-nowrap">
               JANJI JIWA JANJI JIWA
             </h2>
           </div>
-
           <div className="relative z-10">
             <h2 className="text-5xl md:text-7xl font-black text-white mb-12 italic tracking-tighter leading-none">
               Ready to Brew <br /> Your Story?

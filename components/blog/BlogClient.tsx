@@ -1,31 +1,68 @@
 "use client";
-import React, { useState, useMemo } from "react";
+
+import React, { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { BlogSidebar } from "@/components/blog/BlogSidebar";
 
-const BlogClient = ({ allPosts }: { allPosts: any[] }) => {
+interface Post {
+  id: string | number;
+  title: string;
+  category: string;
+  slug: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  image: string;
+}
+
+interface BlogClientProps {
+  allPosts: Post[];
+}
+
+const CATEGORIES = ["All Stories", "Story", "Tips", "News", "Menu"];
+const POSTS_PER_PAGE = 4;
+
+const BlogClient = ({ allPosts }: BlogClientProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Stories");
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 4;
 
-  const categories = ["All Stories", "Story", "Tips", "News", "Menu"];
-
+  // --- FILTER LOGIC ---
   const filteredPosts = useMemo(() => {
     return allPosts.filter((post) => {
-      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === "All Stories" || post.category === selectedCategory;
+      const matchesSearch = post.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All Stories" ||
+        post.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [allPosts, searchQuery, selectedCategory]);
 
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const currentPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
+  // --- PAGINATION LOGIC ---
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+  const currentPosts = useMemo(() => {
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    return filteredPosts.slice(start, start + POSTS_PER_PAGE);
+  }, [filteredPosts, currentPage]);
+
+  // --- HANDLERS ---
+  const handleSearch = useCallback((val: string) => {
+    setSearchQuery(val);
+    setCurrentPage(1);
+  }, []);
+
+  const handleCategoryChange = useCallback((val: string) => {
+    setSelectedCategory(val);
+    setCurrentPage(1);
+  }, []);
 
   return (
-    <main className="pt-24 min-h-screen transition-colors duration-300 bg-[var(--bg-primary)]">
+    <main className="pt-24 min-h-screen bg-[var(--bg-primary)] transition-colors duration-300">
       <section className="py-16 px-6 max-w-7xl mx-auto">
+        {/* --- PAGE HEADER --- */}
         <header className="mb-16">
           <span className="font-black tracking-[0.4em] text-[10px] uppercase block mb-4 text-[var(--jiwa-red)]">
             Journal & News
@@ -36,14 +73,16 @@ const BlogClient = ({ allPosts }: { allPosts: any[] }) => {
         </header>
 
         <div className="flex flex-col lg:flex-row gap-12">
-          <BlogSidebar 
+          {/* --- SIDEBAR (Filter & Search) --- */}
+          <BlogSidebar
             searchQuery={searchQuery}
-            setSearchQuery={(val: string) => { setSearchQuery(val); setCurrentPage(1); }}
+            setSearchQuery={handleSearch}
             selectedCategory={selectedCategory}
-            setSelectedCategory={(val: string) => { setSelectedCategory(val); setCurrentPage(1); }}
-            categories={categories}
+            setSelectedCategory={handleCategoryChange}
+            categories={CATEGORIES}
           />
 
+          {/* --- BLOG FEED --- */}
           <div className="lg:w-3/4">
             {currentPosts.length > 0 ? (
               <div className="grid grid-cols-1 gap-8 mb-16">
@@ -52,46 +91,39 @@ const BlogClient = ({ allPosts }: { allPosts: any[] }) => {
                 ))}
               </div>
             ) : (
-              <div className="py-32 text-center border-2 border-dashed rounded-[3rem] border-[var(--text-primary)]/20 bg-[var(--text-primary)]/[0.02]">
-                <p className="text-lg font-bold opacity-30 text-[var(--text-primary)]">
-                  Tidak ada artikel ditemukan.
-                </p>
-              </div>
+              <EmptyState />
             )}
 
-            {/* PAGINATION */}
+            {/* --- PAGINATION CONTROLS --- */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 border-t border-[var(--text-primary)]/20 pt-10">
-                <button
+              <nav className="flex items-center justify-center gap-4 border-t border-[var(--text-primary)]/10 pt-10">
+                <PaginationButton
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-4 rounded-full border-2 border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] disabled:opacity-10 text-[var(--text-primary)]"
                 >
                   <ChevronLeft size={20} />
-                </button>
-                <div className="flex gap-3">
+                </PaginationButton>
+
+                <div className="flex gap-2">
                   {Array.from({ length: totalPages }).map((_, i) => (
-                    <button
+                    <PageNumber
                       key={i}
+                      active={currentPage === i + 1}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`w-12 h-12 rounded-full font-black text-xs transition-all border-2 ${
-                        currentPage === i + 1 
-                          ? "bg-[var(--jiwa-red)] text-white border-[var(--jiwa-red)]" 
-                          : "bg-transparent text-[var(--text-primary)] border-[var(--text-primary)]/10 hover:border-[var(--text-primary)]/40"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
+                      number={i + 1}
+                    />
                   ))}
                 </div>
-                <button
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+
+                <PaginationButton
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
                   disabled={currentPage === totalPages}
-                  className="p-4 rounded-full border-2 border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] disabled:opacity-10 text-[var(--text-primary)]"
                 >
                   <ChevronRight size={20} />
-                </button>
-              </div>
+                </PaginationButton>
+              </nav>
             )}
           </div>
         </div>
@@ -99,5 +131,54 @@ const BlogClient = ({ allPosts }: { allPosts: any[] }) => {
     </main>
   );
 };
+
+// --- SUB-COMPONENTS ---
+
+const PaginationButton = ({
+  children,
+  onClick,
+  disabled,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  disabled: boolean;
+}) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className="p-4 rounded-full border border-[var(--text-primary)]/10 transition-all hover:border-[var(--jiwa-red)] hover:text-[var(--jiwa-red)] disabled:opacity-20 text-[var(--text-primary)]"
+  >
+    {children}
+  </button>
+);
+
+const PageNumber = ({
+  active,
+  onClick,
+  number,
+}: {
+  active: boolean;
+  onClick: () => void;
+  number: number;
+}) => (
+  <button
+    onClick={onClick}
+    className={`w-12 h-12 rounded-full font-black text-xs transition-all border ${
+      active
+        ? "bg-[var(--jiwa-red)] text-white border-[var(--jiwa-red)] shadow-lg shadow-red-900/20"
+        : "bg-transparent text-[var(--text-primary)] border-[var(--text-primary)]/10 hover:border-[var(--text-primary)]/40"
+    }`}
+  >
+    {number}
+  </button>
+);
+
+const EmptyState = () => (
+  <div className="py-32 text-center border-2 border-dashed rounded-[3rem] border-[var(--text-primary)]/10 bg-[var(--text-primary)]/[0.01]">
+    <p className="text-lg font-bold opacity-30 text-[var(--text-primary)]">
+      Tidak ada artikel ditemukan.
+    </p>
+  </div>
+);
 
 export default BlogClient;

@@ -4,31 +4,38 @@ import BlogClient from "@/components/blog/BlogClient";
 import { BlogSkeleton, SidebarSkeleton } from "@/components/blog/BlogSkeleton";
 import { getPayloadClient } from "@/lib/payload";
 
-// 1. Metadata Best Practice untuk SEO Blog
+// --- 1. SEO METADATA ---
 export const metadata: Metadata = {
-  title: "Journal",
-  description: "Temukan kumpulan cerita, tips kopi, dan kabar terbaru dari Janji Jiwa. Inspirasi dalam setiap cangkir Kopi Dari Hati.",
+  title: "Journal | Janji Jiwa",
+  description:
+    "Temukan kumpulan cerita, tips kopi, dan kabar terbaru dari Janji Jiwa.",
   openGraph: {
     title: "Janji Jiwa Journal | Cerita Tentang Kopi",
     description: "Kumpulan artikel edukasi dan gaya hidup kopi asli Indonesia.",
     images: ["/og-blog.png"],
+    type: "website",
   },
 };
 
-// Komponen Loading State yang rapi
+// --- 2. LOADING STATE (Skeleton UI) ---
 function BlogLoading() {
   return (
-    <div className="pt-24 min-h-screen bg-[var(--bg-primary)]">
+    <div className="pt-32 min-h-screen bg-[var(--bg-primary)]">
       <section className="py-16 px-6 max-w-7xl mx-auto">
-        {/* Skeleton Title */}
-        <div className="h-16 w-48 bg-[var(--jiwa-red)]/10 rounded-2xl mb-12 animate-pulse" />
+        {/* Title Skeleton */}
+        <div className="h-16 w-64 bg-[var(--text-primary)]/5 rounded-3xl mb-16 animate-pulse" />
         
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* Sidebar Skeleton */}
           <div className="lg:w-1/4">
             <SidebarSkeleton />
           </div>
-          <div className="lg:w-3/4 space-y-8">
-            {[1, 2, 3].map((i) => <BlogSkeleton key={i} />)}
+          
+          {/* Feed Skeleton */}
+          <div className="lg:w-3/4 space-y-10">
+            {[1, 2, 3].map((i) => (
+              <BlogSkeleton key={i} />
+            ))}
           </div>
         </div>
       </section>
@@ -36,6 +43,7 @@ function BlogLoading() {
   );
 }
 
+// --- 3. MAIN PAGE COMPONENT ---
 export default async function BlogPage() {
   return (
     <Suspense fallback={<BlogLoading />}>
@@ -44,43 +52,58 @@ export default async function BlogPage() {
   );
 }
 
+// --- 4. DATA FETCHING & SANITIZATION ---
 async function BlogDataFetch() {
   const payload = await getPayloadClient();
+  
+  // Fetch data dari Payload dengan depth 1 agar image (relation) berubah jadi object
   const data = await payload.find({
     collection: "posts",
     depth: 1,
-    sort: "-date",
+    sort: "-date", // Urutkan dari yang terbaru
   });
 
-  // Sanitasi data dengan penanganan error sederhana
-  const sanitizedPosts = data.docs.map((doc: any) => ({
-    id: doc.id,
-    title: doc.title || "Untitled Post",
-    slug: doc.slug,
-    content: doc.content,
-    excerpt: doc.excerpt || "Baca selengkapnya tentang artikel ini...",
-    author: doc.author,
-    date: doc.date 
-      ? new Date(doc.date).toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long", // Diubah ke long agar lebih estetik (Januari, dsb)
-          year: "numeric",
-        })
-      : "Baru saja",
-    category: doc.category || "Lifestyle",
-    image: typeof doc.image === 'string' ? doc.image : doc.image?.url || "/placeholder.webp",
-  }));
+  // Sanitasi data agar siap digunakan oleh Client Component tanpa error serialisasi
+  const sanitizedPosts = data.docs.map((doc: any) => {
+    // Logika pengambilan URL Image dari Media Relation
+    const imageData = doc.image && typeof doc.image === "object" ? doc.image : null;
+    const imageUrl = imageData?.url || "/placeholder.webp";
 
-  // JSON-LD untuk Artikel List agar Google menampilkan 'Rich Snippets'
+    return {
+      id: doc.id,
+      title: doc.title || "Untitled Post",
+      slug: doc.slug,
+      content: doc.content, // RichText data
+      excerpt: doc.excerpt || "Baca selengkapnya tentang artikel ini...",
+      author: doc.author,
+      // Format tanggal lokal Indonesia
+      date: doc.date
+        ? new Date(doc.date).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        : "Baru saja",
+      category: doc.category || "Story",
+      image: imageUrl,
+    };
+  });
+
+  // JSON-LD untuk SEO Google (Blog Schema)
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "name": "Janji Jiwa Journal",
-    "description": "Cerita dibalik setiap cangkir kopi Janji Jiwa",
-    "publisher": {
+    name: "Janji Jiwa Journal",
+    url: `${process.env.NEXT_PUBLIC_SERVER_URL}/blog`,
+    description: "Wadah cerita inspirasi dan edukasi kopi dari Janji Jiwa.",
+    publisher: {
       "@type": "Organization",
-      "name": "Janji Jiwa"
-    }
+      name: "Janji Jiwa",
+      logo: {
+        "@type": "ImageObject",
+        "url": `${process.env.NEXT_PUBLIC_SERVER_URL}/logo.png`
+      }
+    },
   };
 
   return (

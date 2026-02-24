@@ -2,31 +2,59 @@ import { revalidatePath } from "next/cache";
 import { CollectionConfig } from "payload";
 
 const formatSlug = (val: string): string =>
-  val.replace(/ /g, '-').replace(/[^\w-]+/g, '').toLowerCase();
+  val
+    ?.replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "")
+    .toLowerCase()
+    .replace(/-{2,}/g, "-")
+    .trim();
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   hooks: {
-    afterChange: [({ doc }) => {
-      revalidatePath("/blog");
-      if (doc?.slug) revalidatePath(`/blog/${doc.slug}`);
-    }],
-    afterDelete: [({ doc }) => {
-      revalidatePath("/blog");
-      if (doc?.slug) revalidatePath(`/blog/${doc.slug}`);
-    }]
+    afterChange: [
+      ({ doc }) => {
+        revalidatePath("/blog");
+        if (doc?.slug) revalidatePath(`/blog/${doc.slug}`);
+      },
+    ],
+    afterDelete: [
+      ({ doc }) => {
+        revalidatePath("/blog");
+        if (doc?.slug) revalidatePath(`/blog/${doc.slug}`);
+      },
+    ],
   },
-  admin: { useAsTitle: "title" },
+  admin: {
+    useAsTitle: "title",
+    defaultColumns: ["title", "author", "category", "date"],
+  },
   fields: [
     {
-      type: "tabs", // Menggunakan Tabs agar Dashboard Admin rapi
+      type: "tabs",
       tabs: [
         {
           label: "Content",
           fields: [
             { name: "title", type: "text", required: true },
-            { name: "content", type: "richText", required: true },
-            { name: "excerpt", type: "textarea", required: true },
+            {
+              name: "content",
+              type: "richText",
+              required: true,
+              admin: {
+                description:
+                  "Tulis isi konten selengkap mungkin untuk Teman Sejiwa.",
+              },
+            },
+            {
+              name: "excerpt",
+              type: "textarea",
+              required: true,
+              admin: {
+                description:
+                  "Ringkasan pendek untuk halaman depan blog (max 160 karakter).",
+              },
+            },
             {
               name: "image",
               type: "upload",
@@ -42,21 +70,40 @@ export const Posts: CollectionConfig = {
               name: "metaTitle",
               type: "text",
               label: "Meta Title (SEO)",
-              admin: { description: "Muncul sebagai judul di Google. Ideal: 50-60 karakter." }
+              admin: {
+                description: "Ideal: 50-60 karakter.",
+              },
             },
             {
               name: "metaDescription",
               type: "textarea",
               label: "Meta Description (SEO)",
-              admin: { description: "Ringkasan di hasil pencarian Google. Ideal: 150-160 karakter." }
+              admin: {
+                description: "Ideal: 150-160 karakter.",
+              },
             },
           ],
         },
         {
           label: "Settings",
           fields: [
-            { name: "author", type: "text", required: true },
-            { name: "date", type: "date", required: true },
+            {
+              type: "row",
+              fields: [
+                {
+                  name: "author",
+                  type: "text",
+                  required: true,
+                  admin: { width: "50%" },
+                },
+                {
+                  name: "date",
+                  type: "date",
+                  required: true,
+                  admin: { width: "50%" },
+                },
+              ],
+            },
             {
               name: "category",
               type: "select",
@@ -69,37 +116,26 @@ export const Posts: CollectionConfig = {
               ],
             },
           ],
-        },
+        }, 
       ],
     },
     {
       name: "slug",
       type: "text",
       unique: true,
-      admin: { position: 'sidebar' },
+      admin: {
+        position: "sidebar",
+        description: "URL unik. Digenerate otomatis dari judul jika kosong.",
+      },
       hooks: {
-        beforeValidate: [({ value, data }) => {
-          if (value) return formatSlug(value);
-          if (data?.title) return formatSlug(data.title);
-          return value;
-        }],
+        beforeValidate: [
+          ({ value, data }) => {
+            if (value) return formatSlug(value);
+            if (data?.title) return formatSlug(data.title);
+            return value;
+          },
+        ],
       },
     },
-  ],
-};
-
-export const Media: CollectionConfig = {
-  slug: "media",
-  upload: {
-    staticDir: "media",
-    imageSizes: [
-      { name: 'thumbnail', width: 400, height: 300, position: 'centre' },
-      { name: 'og', width: 1200, height: 630, position: 'centre' }, // Ukuran ideal share sosmed
-    ],
-    adminThumbnail: 'thumbnail',
-  },
-  access: { read: () => true },
-  fields: [
-    { name: "alt", type: "text", required: true },
   ],
 };
