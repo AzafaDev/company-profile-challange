@@ -69,7 +69,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id">
-      <body className={`${inter.variable} antialiased font-sans`}>
+      <body className={`${inter.variable} antialiased font-sans bg-white`}>
         <ThemeProvider>
           <Navbar />
           <main className="min-h-screen">{children}</main>

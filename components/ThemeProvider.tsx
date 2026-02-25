@@ -16,7 +16,7 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       data-theme={theme}
-      className="min-h-screen transition-colors duration-300 bg-[#0d0d0d]"
+      className="min-h-screen transition-colors duration-300"
     >
       {children}
     </div>
