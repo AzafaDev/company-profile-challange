@@ -123,7 +123,7 @@ const Footer = () => {
               <a
                 key={item}
                 href="#"
-                className="text-[10px] font-black tracking-[0.2em] text-[var(--text-primary)]/30 hover:text-[var(--jiwa-red)] transition-colors uppercase"
+                className="text-[10px] font-black tracking-[0.2em] text-[var(--text-primary)]/80 hover:text-[var(--jiwa-red)] transition-colors uppercase"
               >
                 {item}
               </a>
